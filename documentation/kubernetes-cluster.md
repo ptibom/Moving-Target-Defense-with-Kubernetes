@@ -52,6 +52,8 @@ cat > /etc/docker/daemon.json <<EOF
 EOF
 ```
 
+11. Run `systemctl restart docker.service`
+
 ## Only Master/Control Node
 1. Start cluster, replace IP of master (api) in this command.
 ```
@@ -84,3 +86,12 @@ kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl versio
 kubeadm join 129.16.123.61:6443 --token k6fno7.y8zcnjg89r2hkyrk \
         --discovery-token-ca-cert-hash sha256:09018f5e38a5a5d51281e717896748b7bc2f1622ece6401e3e7eea7cf672c43d
 ```
+
+### Test running a pod
+
+From the master node run:  
+`kubectl run nginx --image=nginx`
+
+Check if its running:  
+`kubectl get pods -o wide`
+

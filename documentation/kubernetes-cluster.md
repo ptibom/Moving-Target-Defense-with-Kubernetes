@@ -7,7 +7,7 @@
 ## Setup
 Instructions for Ubuntu 20.04 LTS
 
-### Master / Control node
+### All Nodes
 1. `sudo apt update`
 2. `sudo apt upgrade`
 3. `sudo apt install docker.io`
@@ -35,6 +35,7 @@ sudo sysctl --system
 sudo apt-get update
 sudo apt-get install -y kubelet kubeadm kubectl
 sudo apt-mark hold kubelet kubeadm kubectl
+sudo su
 ```
 
 10. Configure cgroup driver:
@@ -51,28 +52,34 @@ cat > /etc/docker/daemon.json <<EOF
 EOF
 ```
 
-11. (Only for Master node) Start cluster, replace IP of master (api) in this command.
+## Only Master/Control Node
+1. Start cluster, replace IP of master (api) in this command.
 ```
 kubeadm init --pod-network-cidr 10.244.0.0/16 --apiserver-advertise-address=129.16.123.61
 ```
 
-### Worker nodes
+2. If root user, do `logout`
 
-To start using your cluster, you need to run the following as a regular user:
+3. Run the following as a regular user.
 ```
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 ```
-Alternatively, if you are the root user, you can run:
 
-`export KUBECONFIG=/etc/kubernetes/admin.conf`
+4. Wait for master node to become ready. Check with `kubectl get nodes`
 
-You should now deploy a pod network to the cluster.
-Run "kubectl apply -f [podnetwork].yaml" with one of the options listed at:
-  > https://kubernetes.io/docs/concepts/cluster-administration/addons/
+5.  Install Weave NET:
+```
+kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+```
 
-Then you can join any number of worker nodes by running the following on each as root:
+
+
+
+### Worker nodes
+
+1. Every worker node run:
 ```
 kubeadm join 129.16.123.61:6443 --token k6fno7.y8zcnjg89r2hkyrk \
         --discovery-token-ca-cert-hash sha256:09018f5e38a5a5d51281e717896748b7bc2f1622ece6401e3e7eea7cf672c43d

@@ -83,8 +83,12 @@ kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl versio
 
 1. Every worker node run:
 ```
-kubeadm join 129.16.123.61:6443 --token k6fno7.y8zcnjg89r2hkyrk \
-        --discovery-token-ca-cert-hash sha256:09018f5e38a5a5d51281e717896748b7bc2f1622ece6401e3e7eea7cf672c43d
+kubeadm join 129.16.123.61:6443 --token 8qzrtq.3xdoqo0928hd66fq --discovery-token-ca-cert-hash sha256:09018f5e38a5a5d51281e717896748b7bc2f1622ece6401e3e7eea7cf672c43d
+```
+
+2. If nothing is happening, generate a new token.
+```
+kubeadm token create --print-join-command
 ```
 
 ### Test running a pod

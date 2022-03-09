@@ -9,8 +9,8 @@ Instructions for Ubuntu 20.04 LTS
 
 ### All Nodes
 1. `sudo apt update`
-2. `sudo apt upgrade`
-3. `sudo apt install docker.io`
+2. `sudo apt -y upgrade`
+3. `sudo apt install -y docker.io`
 4. Allow iptables to see bridged traffic.
 ```
 cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf

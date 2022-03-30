@@ -16,28 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package controller;
+package model.encapsulation;
 
-import model.Settings;
-import model.encapsulation.IPod;
-import model.encapsulation.Pod;
+import java.util.List;
 
-public class SettingsController {
-    private Settings settings = new Settings();
-
-    public boolean isShowMenu() {
-        return settings.isShowMenu();
-    }
-
-    public void getPod(String name) {
-
-        try {
-            IPod pod = new Pod(name, "default");
-
-            pod.delete();
-
-        } catch (Exception e) {
-            System.out.println("Could not find the pod named: " + name);
-        }
-    }
+public interface IPod {
+    String podName();
+    List<String> getLabels();
+    void addLabel(String name);
+    void delete() throws Exception;
 }

@@ -16,13 +16,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation;
+package controller;
 
-import java.util.List;
+import model.Settings;
 
-public interface IPod {
-    String getName();
-    List<String> getLabels();
-    void addLabel(String name);
-    void delete() throws Exception;
+public class MtdController {
+    SettingsController settingsController;
+
+    public MtdController(SettingsController settingsController) {
+        this.settingsController = settingsController;
+    }
+
+    public void runMtd() {
+        Settings settings = settingsController.loadSettings(null);
+
+        /* Select alg / controller.
+            if settings.alg == 1:
+                randomMtdController.run();
+            elif settings.alg == 2:
+                seqMtdController.run();
+         */
+    }
+
+    public void test() {
+        // todo, sample, delete me.
+        Settings settings = settingsController.getSettings();
+    }
 }

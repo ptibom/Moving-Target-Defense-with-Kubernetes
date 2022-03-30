@@ -22,12 +22,10 @@ import model.Settings;
 import model.encapsulation.IPod;
 import model.encapsulation.Pod;
 
+import java.io.File;
+
 public class SettingsController {
     private Settings settings = new Settings();
-
-    public boolean isShowMenu() {
-        return settings.isShowMenu();
-    }
 
     public void getPod(String name) {
 
@@ -39,5 +37,23 @@ public class SettingsController {
         } catch (Exception e) {
             System.out.println("Could not find the pod named: " + name);
         }
+    }
+
+    public Settings loadSettings(File file) {
+        // todo load settings
+        // settings = ...
+        return settings;
+    }
+
+    public void saveSettings() {
+        // todo save settings to file.
+    }
+
+    public void setConfigName(String name) {
+        settings.setName(name);
+    }
+
+    public Settings getSettings() {
+        return settings;
     }
 }

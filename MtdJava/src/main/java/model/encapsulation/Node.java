@@ -20,39 +20,30 @@ package model.encapsulation;
 
 import io.kubernetes.client.extended.kubectl.Kubectl;
 import io.kubernetes.client.extended.kubectl.exception.KubectlException;
-import io.kubernetes.client.openapi.models.V1Pod;
+import io.kubernetes.client.openapi.models.V1Node;
 
-import java.io.File;
 import java.util.List;
 
-public class Pod implements IPod {
-    private V1Pod v1Pod;
+public class Node implements INode {
 
-    public Pod(String podName, String namespace) throws Exception {
+    V1Node v1Node;
+
+    public Node(String name) {
         try {
-            v1Pod = Kubectl.get(V1Pod.class)
-                    .namespace(namespace)
-                    .name(podName)
+            v1Node = Kubectl.get(V1Node.class)
+                    .name(name)
                     .execute();
         } catch (KubectlException e) {
-            // TODO add custom exception.
-            throw new Exception();
+            // Todo throw a custom exception
+            e.printStackTrace();
         }
-    }
-
-    public Pod(File yamlFile, String namespace) {
-        // Todo (maybe not a namespace)
     }
 
     @Override
     public String getName() {
-        return v1Pod.getMetadata().getName();
+        return v1Node.getMetadata().getName();
     }
 
-    /**
-     * Gets a list of labels attached to the pod.
-     * @return Returns a list of strings.
-     */
     @Override
     public List<String> getLabels() {
         // todo
@@ -61,19 +52,11 @@ public class Pod implements IPod {
 
     @Override
     public void addLabel(String name) {
-        // Todo
+        // todo
     }
 
     @Override
     public void delete() throws Exception {
-        try {
-            Kubectl.delete(V1Pod.class)
-                    .namespace(v1Pod.getMetadata().getNamespace())
-                    .name(v1Pod.getMetadata().getName())
-                    .execute();
-        } catch (KubectlException e) {
-            // todo throw a custom exception
-            throw new Exception();
-        }
+        // todo
     }
 }

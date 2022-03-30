@@ -21,15 +21,26 @@ import controller.SettingsController;
 
 public class MtdMain {
 
-    private static SettingsController settingsController = new SettingsController();
-    private static MenuController menuController = new MenuController();
 
     public static void main(String[] args) {
-        if (settingsController.isShowMenu()) {
+        if (args.length > 0 && !args[0].equals("nomenu")) {
+            MenuController menuController = new MenuController();
             menuController.showMenu();
         }
         else {
             // TODO: Run from saved settings
+           SettingsController settingsController = new SettingsController();
+
         }
     }
+
+
+
+    // Flow 1: Menu -> Matar in settings -> sparar settings -> startar MTD baserat på settings.
+    // Flow 2: Startar mtd baserat på settings.
+
+    // Start commands.
+    // java mtd.jar
+    // java mtd.jar settings/config1.yaml
+
 }

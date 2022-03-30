@@ -20,7 +20,7 @@ package model.encapsulation;
 
 import java.util.List;
 
-public interface IPod {
+public interface INode {
     String getName();
     List<String> getLabels();
     void addLabel(String name);

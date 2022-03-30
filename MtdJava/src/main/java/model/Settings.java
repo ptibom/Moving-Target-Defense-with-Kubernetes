@@ -19,15 +19,13 @@
 package model;
 
 public class Settings {
-    private boolean showMenu;
+    private String name;
 
-    public boolean isShowMenu() {
-        return showMenu;
+    public String getName() {
+        return name;
     }
 
-    public void setShowMenu(boolean showMenu) {
-        this.showMenu = showMenu;
+    public void setName(String name) {
+        this.name = name;
     }
-
-
 }

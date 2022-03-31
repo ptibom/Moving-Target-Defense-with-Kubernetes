@@ -16,26 +16,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+
+
 package model.encapsulation;
 
 import io.kubernetes.client.extended.kubectl.Kubectl;
 import io.kubernetes.client.extended.kubectl.exception.KubectlException;
 import io.kubernetes.client.openapi.models.V1Node;
+import model.encapsulation.exception.NodeLabelException;
+import model.encapsulation.exception.NodeNotFoundException;
 
-import java.util.List;
+import java.util.Map;
 
 public class Node implements INode {
+    private V1Node v1Node;
 
-    V1Node v1Node;
 
-    public Node(String name) {
+
+    public Node(String name) throws NodeNotFoundException {
         try {
             v1Node = Kubectl.get(V1Node.class)
                     .name(name)
                     .execute();
         } catch (KubectlException e) {
-            // Todo throw a custom exception
-            e.printStackTrace();
+            throw new NodeNotFoundException(e.getMessage());
         }
     }
 
@@ -45,18 +49,26 @@ public class Node implements INode {
     }
 
     @Override
-    public List<String> getLabels() {
-        // todo
-        return null;
+    public Map<String, String> getLabels() {
+        return v1Node.getMetadata().getLabels();
     }
 
     @Override
-    public void addLabel(String name) {
-        // todo
+    public void addLabel(String key, String value) throws NodeLabelException {
+        try {
+            v1Node = Kubectl.label(V1Node.class)
+                    .addLabel(key, value)
+                    .name(v1Node.getMetadata().getName())
+                    .execute();
+        } catch (KubectlException e) {
+            throw new NodeLabelException(e.getMessage());
+        }
     }
 
     @Override
-    public void delete() throws Exception {
-        // todo
+    public void deleteLabel(String key) throws NodeLabelException {
+        addLabel(key, null);
     }
+
+
 }

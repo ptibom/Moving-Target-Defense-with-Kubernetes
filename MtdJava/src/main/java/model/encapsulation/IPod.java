@@ -18,11 +18,15 @@
 
 package model.encapsulation;
 
-import java.util.List;
+import model.encapsulation.exception.PodDeleteException;
+import model.encapsulation.exception.PodLabelException;
+
+import java.util.Map;
 
 public interface IPod {
     String getName();
-    List<String> getLabels();
-    void addLabel(String name);
-    void delete() throws Exception;
+    Map<String, String> getLabels();
+    void addLabel(String key, String value) throws PodLabelException;
+    void deleteLabel(String key) throws PodLabelException;
+    void delete() throws PodDeleteException;
 }

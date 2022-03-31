@@ -18,11 +18,20 @@
 
 import controller.MenuController;
 import controller.SettingsController;
+import io.kubernetes.client.openapi.Configuration;
+import io.kubernetes.client.util.Config;
+
+import java.io.IOException;
 
 public class MtdMain {
 
 
     public static void main(String[] args) {
+        try {
+            Configuration.setDefaultApiClient(Config.defaultClient());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if (args.length > 0 && !args[0].equals("nomenu")) {
             MenuController menuController = new MenuController();
             menuController.showMenu();

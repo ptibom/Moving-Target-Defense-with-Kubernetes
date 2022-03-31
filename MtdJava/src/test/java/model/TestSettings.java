@@ -16,15 +16,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation;
+package model;
 
-import model.encapsulation.exception.NodeLabelException;
+public class TestSettings {
 
-import java.util.Map;
-
-public interface INode {
-    String getName();
-    Map<String, String> getLabels();
-    void addLabel(String key, String value) throws NodeLabelException;
-    void deleteLabel(String key) throws NodeLabelException;
 }

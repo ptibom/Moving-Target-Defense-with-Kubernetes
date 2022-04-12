@@ -90,12 +90,14 @@ public class Deployment implements IDeployment {
         restart.put("date", Instant.now().getEpochSecond() + "");
         v1Deployment.getSpec().getTemplate().getMetadata().setAnnotations(restart);
         try {
-            Kubectl.patch(V1Deployment.class)
-                    .name(v1Deployment.getMetadata().getName())
-                    .patchType(V1Patch.PATCH_FORMAT_STRATEGIC_MERGE_PATCH)
-                    .patchContent(new V1Patch("{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"" +
-                            System.currentTimeMillis() +"\"}}}}}"))
-                    .execute();
+            v1Deployment = Kubectl.patch(V1Deployment.class)
+                            .namespace(v1Deployment.getMetadata().getNamespace())
+                            .name(v1Deployment.getMetadata().getName())
+                            .patchType(V1Patch.PATCH_FORMAT_STRATEGIC_MERGE_PATCH)
+                            .patchContent(new V1Patch("{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"" +
+                                System.currentTimeMillis() +"\"}}}}}"))
+                            .execute();
+            // Todo delete replicaset
         } catch (KubectlException e) {
             throw new ApplyException(e.getMessage());
         }
@@ -113,6 +115,8 @@ public class Deployment implements IDeployment {
                     .namespace(v1Deployment.getMetadata().getNamespace())
                     .name(v1Deployment.getMetadata().getName())
                     .execute();
+            v1Deployment = null;
+            // Todo fix references after execute
         } catch (KubectlException e) {
             throw new DeploymentDeleteException(e.getMessage());
         }

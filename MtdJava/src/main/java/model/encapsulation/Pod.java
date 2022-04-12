@@ -55,6 +55,11 @@ public class Pod implements IPod {
         return v1Pod.getMetadata().getName();
     }
 
+    @Override
+    public String getNodeName() {
+        return v1Pod.getSpec().getNodeName();
+    }
+
     /**
      * Gets a list of labels attached to the pod.
      * @return Returns a list of strings.

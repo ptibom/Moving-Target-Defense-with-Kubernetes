@@ -57,15 +57,21 @@ public class TestDeployment {
 
     @Test
     @Order(2)
-    void testRolloutRestartDeployment() throws NodeNotFoundException, NodeLabelException, DeploymentNotFoundException, ApplyException {
+    void testRolloutRestartDeployment() throws NodeNotFoundException, NodeLabelException, DeploymentNotFoundException, ApplyException, InterruptedException {
         String key = "mtd/node";
         String value = "active";
         INode node = new Node("minikube-m02");
         node.deleteLabel(key);
-        node = new Node("minikube-m03");
+        String nodeName = "minikube-m03";
+        node = new Node(nodeName);
         node.addLabel(key, value);
         IDeployment deployment = new Deployment("nginx-deployment", "default");
         deployment.rolloutRestart();
+        Thread.sleep(5000);
+        deployment = new Deployment("nginx-deployment", "default");
+        List<IPod> podlist = deployment.getPods();
+        IPod pod = podlist.get(0);
+        assertEquals(nodeName, pod.getNodeName());
     }
 
     @Test

@@ -25,6 +25,7 @@ import java.util.Map;
 
 public interface IPod {
     String getName();
+    String getNodeName();
     Map<String, String> getLabels();
     void addLabel(String key, String value) throws PodLabelException;
     void deleteLabel(String key) throws PodLabelException;

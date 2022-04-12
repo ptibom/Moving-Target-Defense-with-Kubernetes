@@ -16,20 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation;
+package model.encapsulation.exception;
 
-import model.encapsulation.exception.ApplyException;
-import model.encapsulation.exception.DeploymentDeleteException;
-import model.encapsulation.exception.DeploymentNotFoundException;
+public class DeploymentNotFoundException extends Exception {
+    public DeploymentNotFoundException() {}
 
-import java.util.List;
-
-public interface IDeployment {
-
-    void apply() throws ApplyException;
-    void rolloutRestart() throws ApplyException;
-    List<IPod> getPods() throws DeploymentNotFoundException;
-    void replace();
-    void delete() throws DeploymentDeleteException;
-
+    public DeploymentNotFoundException(String message) {
+        super(message);
+    }
 }

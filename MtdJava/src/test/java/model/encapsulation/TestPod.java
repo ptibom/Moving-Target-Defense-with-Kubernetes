@@ -90,7 +90,7 @@ public class TestPod {
     // Only works if pod named "nginx" is created first.
     @Test
     @Order(2)
-    void testDeletePod() throws PodDeleteException {
+    void testDeletePod() throws PodDeleteException, InterruptedException {
         try {
             IPod pod = new Pod("nginx", "default");
             pod.delete();
@@ -100,8 +100,6 @@ public class TestPod {
             });
         } catch (PodNotFoundException e) {
             // Just pass the test if the pod "nginx" does not exist.
-        } catch (InterruptedException e) {
-            // Thread sleep exception.
         }
     }
 }

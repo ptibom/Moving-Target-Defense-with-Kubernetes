@@ -21,14 +21,22 @@ package model.encapsulation;
 import io.kubernetes.client.custom.V1Patch;
 import io.kubernetes.client.extended.kubectl.Kubectl;
 import io.kubernetes.client.extended.kubectl.exception.KubectlException;
+import io.kubernetes.client.openapi.ApiException;
+import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1Deployment;
+import io.kubernetes.client.openapi.models.V1Pod;
+import io.kubernetes.client.openapi.models.V1PodList;
 import io.kubernetes.client.util.Yaml;
 import model.encapsulation.exception.ApplyException;
+import model.encapsulation.exception.DeploymentDeleteException;
+import model.encapsulation.exception.DeploymentNotFoundException;
 
 import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Deployment implements IDeployment {
@@ -37,6 +45,32 @@ public class Deployment implements IDeployment {
 
     public Deployment(File file) throws IOException {
         this.v1Deployment = (V1Deployment) Yaml.load(file);
+    }
+
+    public Deployment(String name, String namespace) throws DeploymentNotFoundException {
+        try {
+            v1Deployment = Kubectl.get(V1Deployment.class)
+                    .namespace(namespace)
+                    .name(name)
+                    .execute();
+        } catch (KubectlException e) {
+            throw new DeploymentNotFoundException(e.getMessage());
+        }
+    }
+
+    public List<IPod> getPods() throws DeploymentNotFoundException {
+        CoreV1Api api = new CoreV1Api();
+        String label = v1Deployment.getMetadata().getLabels().get("app");
+        try {
+            V1PodList list = api.listNamespacedPod(v1Deployment.getMetadata().getNamespace(), null, null, null, null, "app=" + label, null, null, null, null, null);
+            List<IPod> pods = new ArrayList<>();
+            for(V1Pod pod : list.getItems()) {
+                pods.add(new Pod(pod));
+            }
+            return pods;
+        } catch (ApiException e) {
+            throw new DeploymentNotFoundException(e.getMessage());
+        }
     }
 
     @Override
@@ -51,15 +85,20 @@ public class Deployment implements IDeployment {
     }
 
     @Override
-    public void rolloutRestart() {
+    public void rolloutRestart() throws ApplyException {
         Map<String, String> restart = new HashMap<>();
         restart.put("date", Instant.now().getEpochSecond() + "");
         v1Deployment.getSpec().getTemplate().getMetadata().setAnnotations(restart);
-        Kubectl.patch(V1Deployment.class)
-                .name(v1Deployment.getMetadata().getName())
-                .patchType(V1Patch.PATCH_FORMAT_STRATEGIC_MERGE_PATCH)
-                .patchContent(new V1Patch("{\"spec\":{\"template\":{\"metadata\":{\"annotations\"}}"))
-                .execute();
+        try {
+            Kubectl.patch(V1Deployment.class)
+                    .name(v1Deployment.getMetadata().getName())
+                    .patchType(V1Patch.PATCH_FORMAT_STRATEGIC_MERGE_PATCH)
+                    .patchContent(new V1Patch("{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"" +
+                            System.currentTimeMillis() +"\"}}}}}"))
+                    .execute();
+        } catch (KubectlException e) {
+            throw new ApplyException(e.getMessage());
+        }
     }
 
     @Override
@@ -68,7 +107,14 @@ public class Deployment implements IDeployment {
     }
 
     @Override
-    public void delete() {
-
+    public void delete() throws DeploymentDeleteException {
+        try {
+            Kubectl.delete(V1Deployment.class)
+                    .namespace(v1Deployment.getMetadata().getNamespace())
+                    .name(v1Deployment.getMetadata().getName())
+                    .execute();
+        } catch (KubectlException e) {
+            throw new DeploymentDeleteException(e.getMessage());
+        }
     }
 }

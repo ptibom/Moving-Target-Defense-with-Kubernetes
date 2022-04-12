@@ -42,6 +42,10 @@ public class Pod implements IPod {
         }
     }
 
+    public Pod(V1Pod pod) {
+        v1Pod = pod;
+    }
+
     public Pod(File yamlFile, String namespace) {
         // Todo (maybe not a namespace)
     }

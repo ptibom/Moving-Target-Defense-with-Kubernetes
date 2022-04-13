@@ -31,8 +31,6 @@ import java.util.Map;
 public class Node implements INode {
     private V1Node v1Node;
 
-
-
     public Node(String name) throws NodeNotFoundException {
         try {
             v1Node = Kubectl.get(V1Node.class)
@@ -69,6 +67,5 @@ public class Node implements INode {
     public void deleteLabel(String key) throws NodeLabelException {
         addLabel(key, null);
     }
-
 
 }

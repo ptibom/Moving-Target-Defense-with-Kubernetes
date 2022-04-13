@@ -18,6 +18,7 @@
 
 package model.encapsulation;
 
+import model.encapsulation.exception.ApplyException;
 import model.encapsulation.exception.PodDeleteException;
 import model.encapsulation.exception.PodLabelException;
 
@@ -28,6 +29,7 @@ public interface IPod {
     String getNodeName();
     Map<String, String> getLabels();
     void addLabel(String key, String value) throws PodLabelException;
+    void apply(String namespace) throws ApplyException;
     void deleteLabel(String key) throws PodLabelException;
     void delete() throws PodDeleteException;
 }

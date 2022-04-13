@@ -49,14 +49,18 @@ public class TestDeployment {
     @Order(1)
     void testInitDeployment() throws IOException, ApplyException, NodeNotFoundException, NodeLabelException {
         IDeployment deployment = new Deployment(new File("TestDeployment.yaml"));
+        // Need to add labels to nodes to correctly start the pods from the deployment file
+        String key = "mtd/node";
         INode node = new Node("minikube-m02");
-        node.addLabel("mtd/node", "active");
+        node.addLabel(key, "active");
+        node = new Node("minikube-m03");
+        node.deleteLabel(key);
         deployment.apply();
         assertNotNull(deployment);
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     void testRolloutRestartDeployment() throws NodeNotFoundException, NodeLabelException, DeploymentNotFoundException, ApplyException, InterruptedException {
         String key = "mtd/node";
         String value = "active";
@@ -83,7 +87,7 @@ public class TestDeployment {
     }
 
     @Test
-    @Order(3)
+    @Order(10)
     void testDeleteDeployment() throws InterruptedException, DeploymentDeleteException {
         try {
             IDeployment deployment = new Deployment("nginx-deployment", "default");

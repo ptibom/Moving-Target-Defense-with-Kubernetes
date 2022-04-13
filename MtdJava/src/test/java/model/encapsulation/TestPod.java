@@ -20,17 +20,20 @@ package model.encapsulation;
 
 import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.util.Config;
+import model.encapsulation.exception.ApplyException;
 import model.encapsulation.exception.PodDeleteException;
 import model.encapsulation.exception.PodLabelException;
 import model.encapsulation.exception.PodNotFoundException;
 import org.junit.jupiter.api.*;
 
+import java.io.File;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TestPod {
+
     @BeforeAll
     static void init() {
         try {
@@ -42,6 +45,14 @@ public class TestPod {
 
     @Test
     @Order(1)
+    void testApply() throws ApplyException, IOException {
+        IPod pod = new Pod(new File("TestPod.yaml"));
+        pod.apply("default");
+        assertNotNull(pod);
+    }
+
+    @Test
+    @Order(2)
     void testInitPod() throws PodNotFoundException {
         String podName = "nginx";
         String namespace = "default";
@@ -50,7 +61,7 @@ public class TestPod {
     }
 
     @Test
-    @Order(1)
+    @Order(2)
     void testPodNotFound() {
         assertThrows(PodNotFoundException.class, () -> {
             IPod pod = new Pod("Fake name", "default");
@@ -58,7 +69,7 @@ public class TestPod {
     }
 
     @Test
-    @Order(1)
+    @Order(2)
     void testGetPodLabels() throws PodNotFoundException {
         String podName = "nginx";
         IPod pod = new Pod(podName, "default");
@@ -66,7 +77,7 @@ public class TestPod {
     }
 
     @Test
-    @Order(1)
+    @Order(3)
     void testAddPodLabel() throws PodNotFoundException, PodLabelException {
         String labelKey = "mtd/test";
         String labelValue = "testpod";
@@ -76,7 +87,7 @@ public class TestPod {
     }
 
     @Test
-    @Order(1)
+    @Order(4)
     void testDeletePodLabel() throws PodNotFoundException, PodLabelException {
         String labelKey = "mtd/test";
         String labelValue = "testpod";
@@ -89,7 +100,7 @@ public class TestPod {
 
     // Only works if pod named "nginx" is created first.
     @Test
-    @Order(2)
+    @Order(5)
     void testDeletePod() throws PodDeleteException, InterruptedException {
         try {
             IPod pod = new Pod("nginx", "default");

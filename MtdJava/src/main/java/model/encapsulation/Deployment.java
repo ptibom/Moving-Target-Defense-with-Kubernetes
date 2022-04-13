@@ -44,7 +44,7 @@ public class Deployment implements IDeployment {
     private V1Deployment v1Deployment;
 
     public Deployment(File file) throws IOException {
-        this.v1Deployment = (V1Deployment) Yaml.load(file);
+        v1Deployment = (V1Deployment) Yaml.load(file);
     }
 
     public Deployment(String name, String namespace) throws DeploymentNotFoundException {
@@ -76,7 +76,7 @@ public class Deployment implements IDeployment {
     @Override
     public void apply() throws ApplyException {
         try {
-            Kubectl.apply(V1Deployment.class)
+            v1Deployment = Kubectl.apply(V1Deployment.class)
                     .resource(v1Deployment)
                     .execute();
         } catch (KubectlException e) {
@@ -105,7 +105,7 @@ public class Deployment implements IDeployment {
 
     @Override
     public void replace() {
-
+        // todo replace what?
     }
 
     @Override

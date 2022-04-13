@@ -21,11 +21,15 @@ package model.encapsulation;
 import io.kubernetes.client.extended.kubectl.Kubectl;
 import io.kubernetes.client.extended.kubectl.exception.KubectlException;
 import io.kubernetes.client.openapi.models.V1Pod;
+import io.kubernetes.client.proto.V1;
+import io.kubernetes.client.util.Yaml;
+import model.encapsulation.exception.ApplyException;
 import model.encapsulation.exception.PodDeleteException;
 import model.encapsulation.exception.PodLabelException;
 import model.encapsulation.exception.PodNotFoundException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 public class Pod implements IPod {
@@ -46,8 +50,20 @@ public class Pod implements IPod {
         v1Pod = pod;
     }
 
-    public Pod(File yamlFile, String namespace) {
-        // Todo (maybe not a namespace)
+    public Pod(File yamlFile) throws IOException {
+        v1Pod = (V1Pod) Yaml.load(yamlFile);
+    }
+
+    @Override
+    public void apply(String namespace) throws ApplyException {
+        try {
+            v1Pod = Kubectl.create(V1Pod.class)
+                    .namespace(namespace)
+                    .resource(v1Pod)
+                    .execute();
+        } catch (KubectlException e) {
+            throw new ApplyException(e.getMessage());
+        }
     }
 
     @Override
@@ -94,6 +110,7 @@ public class Pod implements IPod {
                     .namespace(v1Pod.getMetadata().getNamespace())
                     .name(v1Pod.getMetadata().getName())
                     .execute();
+            v1Pod = null;
         } catch (KubectlException e) {
             throw new PodDeleteException(e.getMessage());
         }

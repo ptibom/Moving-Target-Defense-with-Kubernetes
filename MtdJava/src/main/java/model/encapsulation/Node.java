@@ -16,8 +16,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-
-
 package model.encapsulation;
 
 import io.kubernetes.client.extended.kubectl.Kubectl;
@@ -39,6 +37,10 @@ public class Node implements INode {
         } catch (KubectlException e) {
             throw new NodeNotFoundException(e.getMessage());
         }
+    }
+
+    public Node(V1Node v1Node) {
+        this.v1Node = v1Node;
     }
 
     @Override

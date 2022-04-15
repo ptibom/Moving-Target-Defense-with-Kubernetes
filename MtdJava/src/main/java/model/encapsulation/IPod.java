@@ -31,5 +31,6 @@ public interface IPod {
     void addLabel(String key, String value) throws PodLabelException;
     void apply(String namespace) throws ApplyException;
     void deleteLabel(String key) throws PodLabelException;
+    String getPhase();
     void delete() throws PodDeleteException;
 }

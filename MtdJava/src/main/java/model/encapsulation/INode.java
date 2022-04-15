@@ -19,12 +19,15 @@
 package model.encapsulation;
 
 import model.encapsulation.exception.NodeLabelException;
+import model.encapsulation.exception.PodNotFoundException;
 
+import java.util.List;
 import java.util.Map;
 
 public interface INode {
     String getName();
     Map<String, String> getLabels();
     void addLabel(String key, String value) throws NodeLabelException;
+    List<IPod> getPods() throws PodNotFoundException;
     void deleteLabel(String key) throws NodeLabelException;
 }

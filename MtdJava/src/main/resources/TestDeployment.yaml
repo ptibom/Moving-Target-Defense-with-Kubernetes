@@ -13,6 +13,7 @@ spec:
     metadata:
       labels:
         app: nginx
+        mtd: pod
     spec:
       containers:
         - name: nginx

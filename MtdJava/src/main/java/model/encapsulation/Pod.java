@@ -30,6 +30,7 @@ import model.encapsulation.exception.PodNotFoundException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 
 public class Pod implements IPod {
@@ -44,6 +45,10 @@ public class Pod implements IPod {
         } catch (KubectlException e) {
             throw new PodNotFoundException(e.getMessage());
         }
+    }
+
+    public Pod(String podName) throws PodNotFoundException {
+        this(podName, "default");
     }
 
     public Pod(V1Pod pod) {
@@ -101,6 +106,11 @@ public class Pod implements IPod {
     @Override
     public void deleteLabel(String key) throws PodLabelException {
         addLabel(key, null);
+    }
+
+    @Override
+    public String getPhase() {
+        return v1Pod.getStatus().getPhase();
     }
 
     @Override

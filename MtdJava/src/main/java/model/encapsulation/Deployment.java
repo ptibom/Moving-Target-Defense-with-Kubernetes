@@ -60,9 +60,10 @@ public class Deployment implements IDeployment {
 
     public List<IPod> getPods() throws DeploymentNotFoundException {
         CoreV1Api api = new CoreV1Api();
-        String label = v1Deployment.getMetadata().getLabels().get("app");
+        String label = "app=" + v1Deployment.getMetadata().getLabels().get("app");
         try {
-            V1PodList list = api.listNamespacedPod(v1Deployment.getMetadata().getNamespace(), null, null, null, null, "app=" + label, null, null, null, null, null);
+            V1PodList list = api.listNamespacedPod(v1Deployment.getMetadata().getNamespace(),
+                    null, null, null, null, label, null, null, null, null, null);
             List<IPod> pods = new ArrayList<>();
             for(V1Pod pod : list.getItems()) {
                 pods.add(new Pod(pod));

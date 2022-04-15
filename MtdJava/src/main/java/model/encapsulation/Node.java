@@ -21,13 +21,20 @@ package model.encapsulation;
 import io.kubernetes.client.extended.kubectl.Kubectl;
 import io.kubernetes.client.extended.kubectl.exception.KubectlException;
 import io.kubernetes.client.openapi.models.V1Node;
+import io.kubernetes.client.openapi.models.V1Pod;
+import io.kubernetes.client.openapi.models.V1PodList;
+import io.kubernetes.client.util.generic.options.ListOptions;
 import model.encapsulation.exception.NodeLabelException;
 import model.encapsulation.exception.NodeNotFoundException;
+import model.encapsulation.exception.PodNotFoundException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Node implements INode {
     private V1Node v1Node;
+    private String namespace = "default";
 
     public Node(String name) throws NodeNotFoundException {
         try {
@@ -39,8 +46,18 @@ public class Node implements INode {
         }
     }
 
+    public Node(String name, String namespace) throws NodeNotFoundException {
+        this(name);
+        this.namespace = namespace;
+    }
+
     public Node(V1Node v1Node) {
         this.v1Node = v1Node;
+    }
+
+    public Node(V1Node v1Node, String namespace) {
+        this(v1Node);
+        this.namespace = namespace;
     }
 
     @Override
@@ -62,6 +79,26 @@ public class Node implements INode {
                     .execute();
         } catch (KubectlException e) {
             throw new NodeLabelException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<IPod> getPods() throws PodNotFoundException {
+        try {
+            String fieldSelector = "spec.nodeName=" + v1Node.getMetadata().getName();
+            ListOptions listOptions = new ListOptions();
+            listOptions.setFieldSelector(fieldSelector);
+            List<V1Pod> v1PodList = Kubectl.get(V1Pod.class)
+                    .options(listOptions)
+                    .namespace(namespace)
+                    .execute();
+            List<IPod> podList = new ArrayList<>();
+            for (V1Pod tmp : v1PodList) {
+                podList.add(new Pod(tmp));
+            }
+            return podList;
+        } catch (KubectlException e) {
+            throw new PodNotFoundException(e.getMessage());
         }
     }
 

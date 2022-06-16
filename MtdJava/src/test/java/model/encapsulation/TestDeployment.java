@@ -44,7 +44,7 @@ public class TestDeployment {
     @Test
     @Order(1)
     void testInitDeployment() throws IOException, ApplyException, NodeNotFoundException, NodeLabelException {
-        IDeployment deployment = new Deployment(new File("DeploymentPrintNode.yaml"));
+        IDeployment deployment = new Deployment(new File("TestDeployment.yaml"));
         // Need to add labels to nodes to correctly start the pods from the deployment file
         String key = "mtd/node";
         INode node = new Node("minikube-m02");
@@ -54,7 +54,7 @@ public class TestDeployment {
         deployment.apply();
         assertNotNull(deployment);
     }
-    
+
     @Test
     @Order(3)
     void testRolloutRestartDeployment() throws NodeNotFoundException, NodeLabelException, DeploymentNotFoundException, ApplyException, InterruptedException {

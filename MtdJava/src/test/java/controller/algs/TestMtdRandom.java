@@ -61,7 +61,7 @@ public class TestMtdRandom {
     @Test
     @Disabled
     // Same test as "testRun" but longer -- And with node printing deployment.
-    // minikube service my-service --url
+    // minikube service lb-service --url
     void testWithLoadBalancer() throws IOException, ApplyException {
         IService service = new Service(new File("TestService.yaml"));
         service.apply();

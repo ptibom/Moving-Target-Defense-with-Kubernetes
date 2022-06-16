@@ -18,8 +18,10 @@
 
 package model.encapsulation;
 
+import model.encapsulation.exception.ApplyException;
 import model.encapsulation.exception.KubeServiceDeleteException;
 
 public interface IService {
+    void apply() throws ApplyException;
     void delete() throws KubeServiceDeleteException;
 }

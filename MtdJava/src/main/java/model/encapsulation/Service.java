@@ -20,8 +20,10 @@ package model.encapsulation;
 
 import io.kubernetes.client.extended.kubectl.Kubectl;
 import io.kubernetes.client.extended.kubectl.exception.KubectlException;
+import io.kubernetes.client.openapi.models.V1Deployment;
 import io.kubernetes.client.openapi.models.V1Service;
 import io.kubernetes.client.util.Yaml;
+import model.encapsulation.exception.ApplyException;
 import model.encapsulation.exception.KubeServiceDeleteException;
 import model.encapsulation.exception.KubeServiceNotFoundException;
 
@@ -44,6 +46,17 @@ public class Service implements IService {
 
     public Service(File file) throws IOException {
         v1Service = (V1Service) Yaml.load(file);
+    }
+
+    @Override
+    public void apply() throws ApplyException {
+        try {
+            v1Service = Kubectl.apply(V1Service.class)
+                    .resource(v1Service)
+                    .execute();
+        } catch (KubectlException e) {
+            throw new ApplyException(e.getMessage());
+        }
     }
 
 

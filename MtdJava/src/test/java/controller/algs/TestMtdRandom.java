@@ -82,6 +82,7 @@ public class TestMtdRandom {
 
         IDeployment deployment = new Deployment("nginx-deployment", "default");
         deployment.delete();
+        //todo fix kubeservicenotfoundexception
         IService service = new Service("lb-service.yaml", "default");
         service.delete();
     }

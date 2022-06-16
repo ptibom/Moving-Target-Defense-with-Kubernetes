@@ -61,6 +61,7 @@ public class TestMtdRandom {
     @Test
     @Disabled
     // Same test as "testRun" but longer -- And with node printing deployment.
+    // minikube service my-service --url
     void testWithLoadBalancer() throws IOException {
         IDeployment deployment = new Deployment(new File("DeploymentPrintNode.yaml"));
         MtdRandom mtdRandom = new MtdRandom(deployment, 5000);

@@ -23,9 +23,9 @@ import io.kubernetes.client.util.Config;
 
 import model.encapsulation.Deployment;
 import model.encapsulation.IDeployment;
-import model.encapsulation.exception.ApplyException;
-import model.encapsulation.exception.DeploymentDeleteException;
-import model.encapsulation.exception.DeploymentNotFoundException;
+import model.encapsulation.IService;
+import model.encapsulation.Service;
+import model.encapsulation.exception.*;
 import org.junit.jupiter.api.*;
 
 import java.io.File;
@@ -63,6 +63,7 @@ public class TestMtdRandom {
     // Same test as "testRun" but longer -- And with node printing deployment.
     // minikube service my-service --url
     void testWithLoadBalancer() throws IOException {
+        IService service = new Service(new File("TestService.yaml"));
         IDeployment deployment = new Deployment(new File("DeploymentPrintNode.yaml"));
         MtdRandom mtdRandom = new MtdRandom(deployment, 5000);
         mtdRandom.setTestSuite(true);
@@ -75,9 +76,13 @@ public class TestMtdRandom {
     }
 
     @AfterAll
-    static void deleteDeployment() throws DeploymentDeleteException, DeploymentNotFoundException {
+    static void deleteDeployment() throws DeploymentDeleteException, DeploymentNotFoundException,
+            KubeServiceDeleteException, KubeServiceNotFoundException {
+
         IDeployment deployment = new Deployment("nginx-deployment", "default");
         deployment.delete();
+        IService service = new Service("lb-service.yaml", "default");
+        service.delete();
     }
 
 }

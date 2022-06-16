@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-service
+  name: lb-service
 spec:
   type: NodePort
   selector:

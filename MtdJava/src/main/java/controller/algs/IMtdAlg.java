@@ -21,7 +21,7 @@ package controller.algs;
 import java.util.List;
 
 public interface IMtdAlg {
-    List<String> run();
+    List<String> run(int nSwaps);
     void stop();
     void setTimeBetweenSwap(int milliseconds);
     int getTimeBetweenSwap();

@@ -51,10 +51,10 @@ public class MtdRandom implements IMtdAlg {
     }
 
     @Override
-    public List<String> run() {
+    public List<String> run(int nSwaps) {
         try {
             List<String> log = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < nSwaps; i++) {
                 if (!isRunning) {
                     isRunning = true;
                     List<INode> nodeList = NodeTools.getWorkerNodes();

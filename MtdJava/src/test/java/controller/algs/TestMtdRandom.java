@@ -50,7 +50,22 @@ public class TestMtdRandom {
         IDeployment deployment = new Deployment(new File("TestDeployment.yaml"));
         MtdRandom mtdRandom = new MtdRandom(deployment, 5000);
         mtdRandom.setTestSuite(true);
-        List<String> log = mtdRandom.run();
+        List<String> log = mtdRandom.run(10);
+        String previousEntry = "";
+        for (String s : log) {
+            assertNotEquals(previousEntry, s);
+            previousEntry = s;
+        }
+    }
+
+    @Test
+    @Disabled
+    // Same test as "testRun" but longer -- And with node printing deployment.
+    void testWithLoadBalancer() throws IOException {
+        IDeployment deployment = new Deployment(new File("DeploymentPrintNode.yaml"));
+        MtdRandom mtdRandom = new MtdRandom(deployment, 5000);
+        mtdRandom.setTestSuite(true);
+        List<String> log = mtdRandom.run(20);
         String previousEntry = "";
         for (String s : log) {
             assertNotEquals(previousEntry, s);

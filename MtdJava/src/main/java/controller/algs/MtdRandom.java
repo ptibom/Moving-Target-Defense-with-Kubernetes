@@ -37,7 +37,6 @@ public class MtdRandom implements IMtdAlg {
     private boolean testSuite = false;
     private boolean isRunning = false;
 
-
     public MtdRandom(IDeployment deployment, int timeBetweenSwap) {
         this.deployment = deployment;
         this.timeBetweenSwap = timeBetweenSwap;

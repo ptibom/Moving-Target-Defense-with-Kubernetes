@@ -29,7 +29,6 @@ public interface IDeployment {
     void apply() throws ApplyException;
     void rolloutRestart() throws ApplyException;
     List<IPod> getPods() throws DeploymentNotFoundException;
-    void replace();
     void delete() throws DeploymentDeleteException;
 
 }

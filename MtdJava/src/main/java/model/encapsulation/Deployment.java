@@ -98,15 +98,9 @@ public class Deployment implements IDeployment {
                             .patchContent(new V1Patch("{\"spec\":{\"template\":{\"metadata\":{\"annotations\":{\"date\":\"" +
                                 System.currentTimeMillis() +"\"}}}}}"))
                             .execute();
-            // Todo delete replicaset
         } catch (KubectlException e) {
             throw new ApplyException(e.getMessage());
         }
-    }
-
-    @Override
-    public void replace() {
-        // todo replace what?
     }
 
     @Override
@@ -117,7 +111,6 @@ public class Deployment implements IDeployment {
                     .name(v1Deployment.getMetadata().getName())
                     .execute();
             v1Deployment = null;
-            // Todo fix references after execute
         } catch (KubectlException e) {
             throw new DeploymentDeleteException(e.getMessage());
         }

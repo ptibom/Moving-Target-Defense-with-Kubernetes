@@ -68,7 +68,7 @@ public class TestMtdRandom {
         IDeployment deployment = new Deployment(new File("DeploymentPrintNode.yaml"));
         MtdRandom mtdRandom = new MtdRandom(deployment, 5000);
         mtdRandom.setTestSuite(true);
-        List<String> log = mtdRandom.run(20);
+        List<String> log = mtdRandom.run(10);
         String previousEntry = "";
         for (String s : log) {
             assertNotEquals(previousEntry, s);
@@ -82,8 +82,7 @@ public class TestMtdRandom {
 
         IDeployment deployment = new Deployment("nginx-deployment", "default");
         deployment.delete();
-        //todo fix kubeservicenotfoundexception
-        IService service = new Service("lb-service.yaml", "default");
+        IService service = new Service("lb-service", "default");
         service.delete();
     }
 

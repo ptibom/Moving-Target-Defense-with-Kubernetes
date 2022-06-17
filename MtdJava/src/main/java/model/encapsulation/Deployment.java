@@ -115,4 +115,9 @@ public class Deployment implements IDeployment {
             throw new DeploymentDeleteException(e.getMessage());
         }
     }
+
+    @Override
+    public String getName() {
+        return v1Deployment.getMetadata().getName();
+    }
 }

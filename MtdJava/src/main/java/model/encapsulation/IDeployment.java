@@ -30,5 +30,5 @@ public interface IDeployment {
     void rolloutRestart() throws ApplyException;
     List<IPod> getPods() throws DeploymentNotFoundException;
     void delete() throws DeploymentDeleteException;
-
+    String getName();
 }

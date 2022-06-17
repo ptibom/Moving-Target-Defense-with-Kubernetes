@@ -20,6 +20,8 @@ package model;
 
 public class Settings {
     private String name;
+    private boolean serviceEnabled = false; // LoadBalancer
+    private String serviceFileName = "TestService.yaml";
 
     public String getName() {
         return name;
@@ -27,5 +29,17 @@ public class Settings {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public boolean isServiceEnabled() {
+        return serviceEnabled;
+    }
+
+    public void setServiceEnabled(boolean serviceEnabled) {
+        this.serviceEnabled = serviceEnabled;
+    }
+
+    public String getServiceFileName() {
+        return serviceFileName;
     }
 }

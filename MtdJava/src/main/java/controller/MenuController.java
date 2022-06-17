@@ -20,10 +20,60 @@ package controller;
 
 import view.MenuView;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Locale;
+import java.util.Scanner;
+
 public class MenuController {
     MenuView menuView = new MenuView();
+    SettingsController settingsController;
 
     public void showMenu() {
         menuView.showMenu();
+        Scanner sc = new Scanner(System.in);
+
+        boolean optionSelected = false;
+        while (!optionSelected) {
+            String input = sc.nextLine();
+            switch (input.strip()) {
+                case "1":
+                    startSelected();
+                    optionSelected = true;
+                    break;
+                case "2":
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid option, try again");
+            }
+        }
+    }
+
+    public void startSelected() {
+        menuView.printLoadBalancerQuestion();
+        settingsController = new SettingsController();
+
+        Scanner sc = new Scanner(System.in);
+        String input = sc.nextLine();
+        boolean loadBalancing;
+        while (true) {
+            if (input.strip().equalsIgnoreCase("y") || input.strip().equalsIgnoreCase("yes")) {
+                loadBalancing = true;
+                break;
+            }
+            else if (input.strip().equalsIgnoreCase("n") || input.strip().equalsIgnoreCase("no")) {
+                loadBalancing = false;
+                break;
+            }
+            else {
+                menuView.repeatLoadBalancerQuestion();
+            }
+        }
+        System.out.println("Starting MTD.");
+        settingsController.getSettings().setServiceEnabled(loadBalancing);
+        MtdController mtdController = new MtdController(settingsController);
+        mtdController.runMtd(); // todo, run in async thread?
     }
 }

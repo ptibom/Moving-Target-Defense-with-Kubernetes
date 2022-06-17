@@ -18,17 +18,43 @@
 
 package controller;
 
+import controller.algs.IMtdAlg;
+import controller.algs.MtdRandom;
 import model.Settings;
+import model.encapsulation.Deployment;
+import model.encapsulation.IDeployment;
+import model.encapsulation.IService;
+import model.encapsulation.Service;
+import model.encapsulation.exception.ApplyException;
+import view.MtdView;
+
+import java.io.File;
+import java.io.IOException;
 
 public class MtdController {
     SettingsController settingsController;
+    MtdView mtdView = new MtdView();
 
     public MtdController(SettingsController settingsController) {
         this.settingsController = settingsController;
     }
 
     public void runMtd() {
-        Settings settings = settingsController.loadSettings(null);
+        Settings settings = settingsController.getSettings();
+        String fileName = "DeploymentPrintNode.yaml";
+        try {
+            if (settings.isServiceEnabled()) {
+                IService service = new Service(new File(settings.getServiceFileName()));
+                service.apply();
+            }
+            IDeployment deployment = new Deployment(new File(fileName));
+            IMtdAlg alg = new MtdRandom(deployment, 5000);
+            alg.run(10);
+        } catch (IOException e) {
+            mtdView.printError("Could not find file: " + fileName);
+        } catch (ApplyException e) {
+            mtdView.printError("Could not apply Service to cluster.");
+        }
 
         /* Select alg / controller.
             if settings.alg == 1:

@@ -19,9 +19,22 @@
 package view;
 
 public class MenuView {
-
-
     public void showMenu() {
+        System.out.println("Moving Target Defense");
+        System.out.println("=====================");
+        System.out.println("Menu options");
+        System.out.println("1. Start MTD");
+        System.out.println("2. Exit");
+        System.out.println("Make a selection:");
+    }
 
+    public void printLoadBalancerQuestion() {
+        System.out.println("\nStart MTD Selected");
+        System.out.println("Do you want load balancing? (y/n)");
+    }
+
+    public void repeatLoadBalancerQuestion() {
+        System.out.println("Invalid input");
+        System.out.println("Do you want load balancing? (y/n)");
     }
 }

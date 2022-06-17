@@ -24,15 +24,13 @@ import io.kubernetes.client.util.Config;
 import java.io.IOException;
 
 public class MtdMain {
-
-
     public static void main(String[] args) {
         try {
             Configuration.setDefaultApiClient(Config.defaultClient());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (args.length > 0 && !args[0].equals("nomenu")) {
+        if (args.length == 0) {
             MenuController menuController = new MenuController();
             menuController.showMenu();
         }
@@ -51,5 +49,13 @@ public class MtdMain {
     // Start commands.
     // java mtd.jar
     // java mtd.jar settings/config1.yaml
+
+    // todo settings
+    // - Name for file when saving
+    // - Fix locations for files after compiling jar.
+    // - Compile jar with maven
+    // - Time between swaps
+    // - Random interval time
+    // - Alg selection (maybe)
 
 }

@@ -16,28 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package controller;
+package view;
 
-import model.Settings;
-import model.encapsulation.IPod;
-import model.encapsulation.Pod;
-
-import java.io.File;
-
-public class SettingsController {
-    private Settings settings = new Settings();
-
-    public Settings loadSettings(File file) {
-        // todo load settings
-        // settings = ...
-        return settings;
-    }
-
-    public void saveSettings() {
-        // todo save settings to file.
-    }
-
-    public Settings getSettings() {
-        return settings;
+public class MtdView {
+    public void printError(String s) {
+        System.out.println("MTD stopped with the error:");
+        System.out.println(s);
     }
 }

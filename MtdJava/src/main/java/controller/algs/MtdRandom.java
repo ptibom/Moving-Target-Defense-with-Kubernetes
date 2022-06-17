@@ -61,6 +61,12 @@ public class MtdRandom implements IMtdAlg {
                         node.deleteLabel(LABEL_KEY);
                     }
                     currentNode.addLabel(LABEL_KEY, LABEL_VALUE);
+                    try {
+                        // Delete old deployment if exists.
+                        IDeployment oldDeployment = new Deployment(deployment.getName(), "default");
+                        oldDeployment.delete();
+                    } catch (DeploymentNotFoundException | DeploymentDeleteException ignored) {
+                    }
                     deployment.apply();
 
                     Thread.sleep(timeBetweenSwap);
@@ -70,7 +76,7 @@ public class MtdRandom implements IMtdAlg {
 
                 System.out.println("#Pods on node: " + currentNode.getPods().size());
                 while (currentNode.getPods().size() == 0) {
-                    System.out.println("Zero pods, waiting.");
+                    System.out.println("Zero pods, waiting. Node: " + currentNode.getName());
                     Thread.sleep(200);
                     currentNode = new Node(currentNode.getName());
                 }

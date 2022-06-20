@@ -22,6 +22,8 @@ public class Settings {
     private String name;
     private boolean serviceEnabled = false; // LoadBalancer
     private String serviceFileName = "TestService.yaml";
+    private boolean logToConsole = true;
+    private boolean logToFile = true;
 
     public String getName() {
         return name;
@@ -41,5 +43,21 @@ public class Settings {
 
     public String getServiceFileName() {
         return serviceFileName;
+    }
+
+    public boolean isLogToConsole() {
+        return logToConsole;
+    }
+
+    public void setLogToConsole(boolean logToConsole) {
+        this.logToConsole = logToConsole;
+    }
+
+    public boolean isLogToFile() {
+        return logToFile;
+    }
+
+    public void setLogToFile(boolean logToFile) {
+        this.logToFile = logToFile;
     }
 }

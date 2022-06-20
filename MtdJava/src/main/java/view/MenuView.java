@@ -22,19 +22,29 @@ public class MenuView {
     public void showMenu() {
         System.out.println("Moving Target Defense");
         System.out.println("=====================");
-        System.out.println("Menu options");
-        System.out.println("1. Start MTD");
-        System.out.println("2. Exit");
-        System.out.println("Make a selection:");
+        System.out.println("Menu Options");
+        System.out.println("1. Create & Run Settings File");
+        System.out.println("2. Load & Run Settings File");
+        System.out.println("3. Edit Settings File");
+        System.out.println("4. Exit");
+        System.out.println("---------------------");
+        System.out.println("Make a selection (number):");
     }
 
     public void printLoadBalancerQuestion() {
-        System.out.println("\nStart MTD Selected");
+        System.out.println("\n--- MTD Wizard ---");
         System.out.println("Do you want load balancing? (y/n)");
     }
 
-    public void repeatLoadBalancerQuestion() {
-        System.out.println("Invalid input");
-        System.out.println("Do you want load balancing? (y/n)");
+    public void printFileLoggingQuestion() {
+        System.out.println("Do you want logging to file? (y/n)");
+    }
+
+    public void printConsoleLoggingQuestion() {
+        System.out.println("Do you want logging to console? (y/n)");
+    }
+
+    public void printInvalidInput() {
+        System.out.println("Invalid input, try again:");
     }
 }

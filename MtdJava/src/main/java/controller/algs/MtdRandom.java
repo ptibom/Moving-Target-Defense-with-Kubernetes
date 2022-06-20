@@ -37,7 +37,7 @@ public class MtdRandom implements IMtdAlg {
     private boolean testSuite = false;
     private boolean isRunning = false;
 
-    public MtdRandom(IDeployment deployment, int timeBetweenSwap) {
+    public MtdRandom(IDeployment deployment, int timeBetweenSwap) throws Exception {
         this.deployment = deployment;
         this.timeBetweenSwap = timeBetweenSwap;
         try {
@@ -46,6 +46,8 @@ public class MtdRandom implements IMtdAlg {
             currentIndex = random.nextInt(nodeList.size());
             currentNode = nodeList.get(currentIndex);
         } catch (NodeNotFoundException e) {
+        } catch (IllegalArgumentException e) {
+            throw new Exception("Not enough worker nodes."); // todo create a custom exception
         }
     }
 

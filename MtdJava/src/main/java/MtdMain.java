@@ -57,5 +57,7 @@ public class MtdMain {
     // - Time between swaps
     // - Random interval time
     // - Alg selection (maybe)
+    // - Log to file
+    // - Log to console
 
 }

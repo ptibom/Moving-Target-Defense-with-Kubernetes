@@ -19,8 +19,6 @@
 package controller;
 
 import model.Settings;
-import model.encapsulation.IPod;
-import model.encapsulation.Pod;
 
 import java.io.File;
 
@@ -39,5 +37,17 @@ public class SettingsController {
 
     public Settings getSettings() {
         return settings;
+    }
+
+    public void setLoadBalancerSetting(boolean enableLoadBalancer) {
+        settings.setServiceEnabled(enableLoadBalancer);
+    }
+
+    public void setFileLoggingSetting(boolean enableFileLogging) {
+        settings.setLogToFile(enableFileLogging);
+    }
+
+    public void setConsoleLoggingSetting(boolean enableConsoleLogging) {
+        settings.setLogToConsole(enableConsoleLogging);
     }
 }

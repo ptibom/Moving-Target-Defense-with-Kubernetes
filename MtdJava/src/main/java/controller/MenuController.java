@@ -20,10 +20,6 @@ package controller;
 
 import view.MenuView;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Locale;
 import java.util.Scanner;
 
 public class MenuController {
@@ -39,41 +35,65 @@ public class MenuController {
             String input = sc.nextLine();
             switch (input.strip()) {
                 case "1":
-                    startSelected();
+                    SettingsController settingsController = new SettingsController();
+                    askLoadBalancerQuestion(settingsController);
+                    askFileLoggingQuestino(settingsController);
+                    askConsoleLoggingQuestion(settingsController);
+                    MtdController mtdController = new MtdController(settingsController);
+                    mtdController.runMtd(); // todo, run in async thread?
                     optionSelected = true;
                     break;
                 case "2":
+                    optionSelected = true;
+                    break;
+                case "3":
+                    optionSelected = true;
+                    break;
+                case "4":
                     System.exit(0);
                     break;
                 default:
-                    System.out.println("Invalid option, try again");
+                    menuView.printInvalidInput();
             }
         }
     }
 
-    public void startSelected() {
+    public void askLoadBalancerQuestion(SettingsController settingsController) {
         menuView.printLoadBalancerQuestion();
-        settingsController = new SettingsController();
+        boolean answer = askYesNo();
+        settingsController.setLoadBalancerSetting(answer);
+    }
 
+
+    public void askFileLoggingQuestino(SettingsController settingsController) {
+        menuView.printFileLoggingQuestion();
+        boolean answer = askYesNo();
+        settingsController.setFileLoggingSetting(answer);
+    }
+
+    public void askConsoleLoggingQuestion(SettingsController settingsController) {
+        menuView.printConsoleLoggingQuestion();
+        boolean answer = askYesNo();
+        settingsController.setConsoleLoggingSetting(answer);
+    }
+
+    private boolean askYesNo() {
         Scanner sc = new Scanner(System.in);
-        String input = sc.nextLine();
-        boolean loadBalancing;
+        boolean answer;
         while (true) {
+            String input = sc.nextLine();
             if (input.strip().equalsIgnoreCase("y") || input.strip().equalsIgnoreCase("yes")) {
-                loadBalancing = true;
+                answer = true;
                 break;
             }
             else if (input.strip().equalsIgnoreCase("n") || input.strip().equalsIgnoreCase("no")) {
-                loadBalancing = false;
+                answer = false;
                 break;
             }
             else {
-                menuView.repeatLoadBalancerQuestion();
+                menuView.printInvalidInput();
             }
         }
-        System.out.println("Starting MTD.");
-        settingsController.getSettings().setServiceEnabled(loadBalancing);
-        MtdController mtdController = new MtdController(settingsController);
-        mtdController.runMtd(); // todo, run in async thread?
+        return answer;
     }
 }

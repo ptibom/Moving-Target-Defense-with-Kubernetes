@@ -54,6 +54,8 @@ public class MtdController {
             mtdView.printError("Could not find file: " + fileName);
         } catch (ApplyException e) {
             mtdView.printError("Could not apply Service to cluster.");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         /* Select alg / controller.

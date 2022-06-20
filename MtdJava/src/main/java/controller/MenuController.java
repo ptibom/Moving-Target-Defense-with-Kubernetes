@@ -37,7 +37,7 @@ public class MenuController {
                 case "1":
                     SettingsController settingsController = new SettingsController();
                     askLoadBalancerQuestion(settingsController);
-                    askFileLoggingQuestino(settingsController);
+                    askFileLoggingQuestion(settingsController);
                     askConsoleLoggingQuestion(settingsController);
                     MtdController mtdController = new MtdController(settingsController);
                     mtdController.runMtd(); // todo, run in async thread?
@@ -65,7 +65,7 @@ public class MenuController {
     }
 
 
-    public void askFileLoggingQuestino(SettingsController settingsController) {
+    public void askFileLoggingQuestion(SettingsController settingsController) {
         menuView.printFileLoggingQuestion();
         boolean answer = askYesNo();
         settingsController.setFileLoggingSetting(answer);

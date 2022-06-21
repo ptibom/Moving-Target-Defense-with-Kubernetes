@@ -46,7 +46,7 @@ public class TestMtdRandom {
     }
 
     @Test
-    void testRun() throws IOException {
+    void testRun() throws Exception {
         IDeployment deployment = new Deployment(new File("TestDeployment.yaml"));
         MtdRandom mtdRandom = new MtdRandom(deployment, 5000);
         mtdRandom.setTestSuite(true);
@@ -62,7 +62,7 @@ public class TestMtdRandom {
     @Disabled
     // Same test as "testRun" but longer -- And with node printing deployment.
     // minikube service lb-service --url
-    void testWithLoadBalancer() throws IOException, ApplyException {
+    void testWithLoadBalancer() throws Exception {
         IService service = new Service(new File("TestService.yaml"));
         service.apply();
         IDeployment deployment = new Deployment(new File("DeploymentPrintNode.yaml"));

@@ -26,6 +26,8 @@ import java.util.Scanner;
 public class MenuController {
     MenuView menuView = new MenuView();
 
+    // TODO do rest of tests for MenuController
+
     public void showMenu() {
         menuView.showMenu();
         Scanner sc = new Scanner(System.in);
@@ -71,7 +73,6 @@ public class MenuController {
         return answer;
     }
 
-
     public void askFileLoggingQuestion(SettingsController settingsController) {
         menuView.printFileLoggingQuestion();
         boolean answer = inputYesNo();
@@ -100,7 +101,7 @@ public class MenuController {
         return new File(fileName).exists();
     }
 
-    private String inputFileName() {
+    public String inputFileName() {
         Scanner sc = new Scanner(System.in);
         while (true) {
             String input = sc.nextLine().strip();
@@ -118,7 +119,7 @@ public class MenuController {
         }
     }
 
-    private boolean inputYesNo() {
+    public boolean inputYesNo() {
         Scanner sc = new Scanner(System.in);
         boolean answer;
         while (true) {

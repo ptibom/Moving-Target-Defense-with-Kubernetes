@@ -18,25 +18,35 @@
 
 package controller;
 
-import io.kubernetes.client.openapi.Configuration;
-import io.kubernetes.client.util.Config;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
 import model.Settings;
 import org.junit.jupiter.api.*;
 
+import java.io.File;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSettingsController {
+    @Test
+    void tempTest() throws IOException {
+        Settings settings = new Settings();
+        settings.setDeploymentFileName("TestDeployment.yaml");
+        settings.setLogToConsole(true);
+        settings.setLogToFile(false);
+        settings.setServiceFileName("TestService.yaml");
+        settings.setName("Settings.yaml");
 
-    @BeforeAll
-    static void init() {
-        try {
-            Configuration.setDefaultApiClient(Config.defaultClient());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        YAMLFactory f = YAMLFactory.builder()
+                .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
+                .build();
+
+        YAMLMapper mapper = new YAMLMapper(f);
+        //YAMLMapper yamlMapper = new YAMLMapper();
+        mapper.writeValue(new File("Test4.yaml"), settings);
+        String result = mapper.writeValueAsString(settings);
+        System.out.println(result);
     }
-
-
 }

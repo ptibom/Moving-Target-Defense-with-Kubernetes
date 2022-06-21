@@ -1,0 +1,6 @@
+name: "Settings.yaml"
+serviceEnabled: false
+serviceFileName: "TestService.yaml"
+deploymentFileName: "TestDeployment.yaml"
+logToConsole: true
+logToFile: false

@@ -22,6 +22,7 @@ public class Settings {
     private String name;
     private boolean serviceEnabled = false; // LoadBalancer
     private String serviceFileName = "TestService.yaml";
+    private String deploymentFileName = ""; // todo implement deployment filename
     private boolean logToConsole = true;
     private boolean logToFile = true;
 
@@ -59,5 +60,17 @@ public class Settings {
 
     public void setLogToFile(boolean logToFile) {
         this.logToFile = logToFile;
+    }
+
+    public void setServiceFileName(String serviceFileName) {
+        this.serviceFileName = serviceFileName;
+    }
+
+    public String getDeploymentFileName() {
+        return deploymentFileName;
+    }
+
+    public void setDeploymentFileName(String deploymentFileName) {
+        this.deploymentFileName = deploymentFileName;
     }
 }

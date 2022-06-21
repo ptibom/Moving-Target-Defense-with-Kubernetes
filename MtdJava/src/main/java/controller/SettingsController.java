@@ -39,15 +39,43 @@ public class SettingsController {
         return settings;
     }
 
-    public void setLoadBalancerSetting(boolean enableLoadBalancer) {
+    public void setLoadBalancing(boolean enableLoadBalancer) {
         settings.setServiceEnabled(enableLoadBalancer);
     }
 
-    public void setFileLoggingSetting(boolean enableFileLogging) {
+    public void setFileLogging(boolean enableFileLogging) {
         settings.setLogToFile(enableFileLogging);
     }
 
-    public void setConsoleLoggingSetting(boolean enableConsoleLogging) {
+    public void setConsoleLogging(boolean enableConsoleLogging) {
         settings.setLogToConsole(enableConsoleLogging);
+    }
+
+    public boolean isLoadBalancing() {
+        return settings.isServiceEnabled();
+    }
+
+    public boolean isConsoleLogging() {
+        return settings.isLogToConsole();
+    }
+
+    public boolean isFileLogging() {
+        return settings.isLogToFile();
+    }
+
+    public String getServiceFileName() {
+        return settings.getServiceFileName();
+    }
+
+    public String getDeploymentFileName() {
+        return settings.getDeploymentFileName();
+    }
+
+    public void setServiceFileName(String fileName) {
+        settings.setServiceFileName(fileName);
+    }
+
+    public void setDeploymentFileName(String fileName) {
+        settings.setDeploymentFileName(fileName);
     }
 }

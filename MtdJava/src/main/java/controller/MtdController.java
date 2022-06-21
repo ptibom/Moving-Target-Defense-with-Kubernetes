@@ -40,11 +40,10 @@ public class MtdController {
     }
 
     public void runMtd() {
-        Settings settings = settingsController.getSettings();
         String fileName = "DeploymentPrintNode.yaml";
         try {
-            if (settings.isServiceEnabled()) {
-                IService service = new Service(new File(settings.getServiceFileName()));
+            if (settingsController.isLoadBalancing()) {
+                IService service = new Service(new File(settingsController.getServiceFileName()));
                 service.apply();
             }
             IDeployment deployment = new Deployment(new File(fileName));
@@ -64,10 +63,5 @@ public class MtdController {
             elif settings.alg == 2:
                 seqMtdController.run();
          */
-    }
-
-    public void test() {
-        // todo, sample, delete me.
-        Settings settings = settingsController.getSettings();
     }
 }

@@ -44,7 +44,19 @@ public class MenuView {
         System.out.println("Do you want logging to console? (y/n)");
     }
 
+    public void printServiceFileNameQuestion() {
+        System.out.println("Type your Service YAML file name (including .yaml):");
+    }
+
+    public void printDeploymentFileNameQuestion() {
+        System.out.println("Type your Deployment YAML file name (including .yaml):");
+    }
+
     public void printInvalidInput() {
         System.out.println("Invalid input, try again:");
+    }
+
+    public void printFileNotExists() {
+        System.out.println("The file does not exist. Try again.");
     }
 }

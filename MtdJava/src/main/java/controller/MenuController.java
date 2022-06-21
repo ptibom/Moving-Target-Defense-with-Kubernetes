@@ -20,11 +20,11 @@ package controller;
 
 import view.MenuView;
 
+import java.io.File;
 import java.util.Scanner;
 
 public class MenuController {
     MenuView menuView = new MenuView();
-    SettingsController settingsController;
 
     public void showMenu() {
         menuView.showMenu();
@@ -36,9 +36,15 @@ public class MenuController {
             switch (input.strip()) {
                 case "1":
                     SettingsController settingsController = new SettingsController();
-                    askLoadBalancerQuestion(settingsController);
+
+                    boolean answer = askLoadBalancerQuestion(settingsController);
+                    if (answer) {
+                        askServiceFileQuestion(settingsController);
+                    }
                     askFileLoggingQuestion(settingsController);
                     askConsoleLoggingQuestion(settingsController);
+                    askDeploymentFileQuestion(settingsController);
+
                     MtdController mtdController = new MtdController(settingsController);
                     mtdController.runMtd(); // todo, run in async thread?
                     optionSelected = true;
@@ -58,26 +64,61 @@ public class MenuController {
         }
     }
 
-    public void askLoadBalancerQuestion(SettingsController settingsController) {
+    public boolean askLoadBalancerQuestion(SettingsController settingsController) {
         menuView.printLoadBalancerQuestion();
-        boolean answer = askYesNo();
-        settingsController.setLoadBalancerSetting(answer);
+        boolean answer = inputYesNo();
+        settingsController.setLoadBalancing(answer);
+        return answer;
     }
 
 
     public void askFileLoggingQuestion(SettingsController settingsController) {
         menuView.printFileLoggingQuestion();
-        boolean answer = askYesNo();
-        settingsController.setFileLoggingSetting(answer);
+        boolean answer = inputYesNo();
+        settingsController.setFileLogging(answer);
     }
 
     public void askConsoleLoggingQuestion(SettingsController settingsController) {
         menuView.printConsoleLoggingQuestion();
-        boolean answer = askYesNo();
-        settingsController.setConsoleLoggingSetting(answer);
+        boolean answer = inputYesNo();
+        settingsController.setConsoleLogging(answer);
     }
 
-    private boolean askYesNo() {
+    public void askServiceFileQuestion(SettingsController settingsController) {
+        menuView.printServiceFileNameQuestion();
+        String fileName = inputFileName();
+        settingsController.setServiceFileName(fileName);
+    }
+
+    public void askDeploymentFileQuestion(SettingsController settingsController) {
+        menuView.printDeploymentFileNameQuestion();
+        String fileName = inputFileName();
+        settingsController.setDeploymentFileName(fileName);
+    }
+
+    private boolean checkFileExists(String fileName) {
+        return new File(fileName).exists();
+    }
+
+    private String inputFileName() {
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            String input = sc.nextLine().strip();
+            if (input.matches("^[A-z\\d]+(\\.yaml|\\.yml)$")) {
+                if (checkFileExists(input)) {
+                    return input;
+                }
+                else {
+                    menuView.printFileNotExists();
+                }
+            }
+            else {
+                menuView.printInvalidInput();
+            }
+        }
+    }
+
+    private boolean inputYesNo() {
         Scanner sc = new Scanner(System.in);
         boolean answer;
         while (true) {

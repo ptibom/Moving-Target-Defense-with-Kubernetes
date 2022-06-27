@@ -16,35 +16,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package controller;
+package controller.yaml;
 
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
+import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.dataformat.yaml.YAMLMapper;
-import controller.yaml.IYaml;
-import controller.yaml.Yaml;
-import controller.yaml.YamlFactory;
 import model.Settings;
-import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
-public class TestSettingsController {
-    @Test
-    void tempTest() throws IOException {
+public class Yaml<T> implements IYaml<T> {
 
-        Settings settings = new Settings();
-        settings.setDeploymentFileName("TestDeployment.yaml");
-        settings.setLogToConsole(true);
-        settings.setLogToFile(false);
-        settings.setServiceFileName("TestService.yaml");
-        settings.setName("Settings.yaml");
+    Class<T> clazz;
+
+    public Yaml(Class<T> clazz) {
+        this.clazz = clazz;
     }
 
-    @Test
-    void tempTestLoad() throws IOException {
+    @Override
+    public T load(File file) throws IOException {
         YAMLMapper mapper = new YAMLMapper(new YAMLFactory());
-        Settings settings = mapper.readValue(new File("Test4.yaml"), Settings.class);
-        System.out.println(settings.getName());
+        T t = mapper.readValue(file, clazz);
+        return t;
+    }
+
+    @Override
+    public void save(File file, T t) throws IOException {
+        YAMLFactory f = YAMLFactory.builder()
+                .disable(YAMLGenerator.Feature.WRITE_DOC_START_MARKER)
+                .build();
+        YAMLMapper mapper = new YAMLMapper(f);
+        mapper.writeValue(file, t);
     }
 }

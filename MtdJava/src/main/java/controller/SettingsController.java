@@ -18,21 +18,30 @@
 
 package controller;
 
+import controller.yaml.IYaml;
+import controller.yaml.YamlFactory;
 import model.Settings;
 
 import java.io.File;
+import java.io.IOException;
 
 public class SettingsController {
     private Settings settings = new Settings();
 
-    public Settings loadSettings(File file) {
-        // todo load settings
-        // settings = ...
+    public Settings loadSettings(File file) throws IOException {
+        IYaml<Settings> yaml = new YamlFactory<Settings>().createYaml(Settings.class);
+        settings = yaml.load(file);
         return settings;
     }
 
-    public void saveSettings() {
-        // todo save settings to file.
+    public void setName(String name) throws Exception {
+
+    }
+
+    public void saveSettings() throws IOException {
+        IYaml<Settings> yaml = new YamlFactory<Settings>().createYaml(Settings.class);
+        String filename = settings.getName();
+        yaml.save(new File(filename), settings);
     }
 
     public Settings getSettings() {

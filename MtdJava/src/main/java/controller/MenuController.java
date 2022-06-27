@@ -26,7 +26,7 @@ import java.util.Scanner;
 public class MenuController {
     MenuView menuView = new MenuView();
 
-    // TODO do rest of tests for MenuController
+    // TODO test showMenu when it is finished
 
     public void showMenu() {
         menuView.showMenu();

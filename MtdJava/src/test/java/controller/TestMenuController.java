@@ -43,6 +43,108 @@ public class TestMenuController {
     }
 
     @Test
+    void testAskLoadBalancerQuestionFalse() {
+        ByteArrayInputStream in = new ByteArrayInputStream("n".getBytes());
+        System.setIn(in);
+        MenuController menuController = new MenuController();
+        SettingsController settingsController = new SettingsController();
+        assertFalse(menuController.askLoadBalancerQuestion(settingsController));
+    }
+
+    @Test
+    void testAskLoadBalancerQuestionTrue() {
+        ByteArrayInputStream in = new ByteArrayInputStream("y".getBytes());
+        System.setIn(in);
+        MenuController menuController = new MenuController();
+        SettingsController settingsController = new SettingsController();
+        assertTrue(menuController.askLoadBalancerQuestion(settingsController));
+    }
+
+    @Test
+    void testAskFileLoggingQuestionFalse() {
+        ByteArrayInputStream in = new ByteArrayInputStream("n".getBytes());
+        System.setIn(in);
+        SettingsController settingsController = new SettingsController();
+        MenuController menuController = new MenuController();
+        menuController.askFileLoggingQuestion(settingsController);
+        assertFalse(settingsController.isFileLogging());
+    }
+
+    @Test
+    void testAskFileLoggingQuestionTrue() {
+        ByteArrayInputStream in = new ByteArrayInputStream("y".getBytes());
+        System.setIn(in);
+        SettingsController settingsController = new SettingsController();
+        MenuController menuController = new MenuController();
+        menuController.askFileLoggingQuestion(settingsController);
+        assertTrue(settingsController.isFileLogging());
+    }
+
+    @Test
+    void testAskConsoleLoggingQuestionFalse() {
+        ByteArrayInputStream in = new ByteArrayInputStream("n".getBytes());
+        System.setIn(in);
+        SettingsController settingsController = new SettingsController();
+        MenuController menuController = new MenuController();
+        menuController.askConsoleLoggingQuestion(settingsController);
+        assertFalse(settingsController.isConsoleLogging());
+    }
+
+    @Test
+    void testAskConsoleLoggingQuestionTrue() {
+        ByteArrayInputStream in = new ByteArrayInputStream("y".getBytes());
+        System.setIn(in);
+        SettingsController settingsController = new SettingsController();
+        MenuController menuController = new MenuController();
+        menuController.askConsoleLoggingQuestion(settingsController);
+        assertTrue(settingsController.isConsoleLogging());
+    }
+
+    @Test
+    void testAskServiceFileQuestionValid() {
+        ByteArrayInputStream in = new ByteArrayInputStream("TestService.yaml".getBytes());
+        System.setIn(in);
+        MenuController menuController = new MenuController();
+        SettingsController settingsController = new SettingsController();
+        menuController.askServiceFileQuestion(settingsController);
+        assertEquals("TestService.yaml", settingsController.getServiceFileName());
+    }
+
+    @Test
+    void testAskServiceFileQuestionInvalid() {
+        ByteArrayInputStream in = new ByteArrayInputStream("Test.yaml".getBytes());
+        System.setIn(in);
+        assertThrows(NoSuchElementException.class, () -> {
+            MenuController menuController = new MenuController();
+            SettingsController settingsController = new SettingsController();
+            menuController.askServiceFileQuestion(settingsController);
+            settingsController.getServiceFileName();
+        });
+    }
+
+    @Test
+    void testAskDeploymentFileQuestionValid() {
+        ByteArrayInputStream in = new ByteArrayInputStream("DeploymentPrintNode.yaml".getBytes());
+        System.setIn(in);
+        MenuController menuController = new MenuController();
+        SettingsController settingsController = new SettingsController();
+        menuController.askDeploymentFileQuestion(settingsController);
+        assertEquals("DeploymentPrintNode.yaml", settingsController.getDeploymentFileName());
+    }
+
+    @Test
+    void testAskDeploymentFileQuestionInvalid() {
+        ByteArrayInputStream in = new ByteArrayInputStream("Test.yaml".getBytes());
+        System.setIn(in);
+        assertThrows(NoSuchElementException.class, () -> {
+            MenuController menuController = new MenuController();
+            SettingsController settingsController = new SettingsController();
+            menuController.askDeploymentFileQuestion(settingsController);
+            settingsController.getServiceFileName();
+        });
+    }
+
+    @Test
     void testInputFileNameValid() {
         ByteArrayInputStream in = new ByteArrayInputStream("DeploymentPrintNode.yaml".getBytes());
         System.setIn(in);

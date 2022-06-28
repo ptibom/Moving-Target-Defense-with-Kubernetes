@@ -21,21 +21,28 @@ package controller;
 import controller.yaml.IYaml;
 import controller.yaml.YamlFactory;
 import model.Settings;
+import model.exception.InvalidFileNameException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Scanner;
 
 public class SettingsController {
     private Settings settings = new Settings();
 
-    public Settings loadSettings(File file) throws IOException {
+    public void loadSettings(File file) throws IOException {
         IYaml<Settings> yaml = new YamlFactory<Settings>().createYaml(Settings.class);
         settings = yaml.load(file);
-        return settings;
     }
 
     public void setName(String name) throws Exception {
-
+        String filename = name.strip();
+        if (filename.matches("^[A-z\\d]+(\\.yaml|\\.yml)$")) {
+            settings.setName(filename);
+        }
+        else {
+            throw new InvalidFileNameException("File name must be alphanumeric and end with .yaml or .yml");
+        }
     }
 
     public void saveSettings() throws IOException {

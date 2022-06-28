@@ -18,6 +18,64 @@
 
 package model;
 
+import io.kubernetes.client.openapi.Configuration;
+import io.kubernetes.client.util.Config;
+import org.junit.jupiter.api.*;
+
+import java.io.IOException;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 public class TestSettings {
 
+    @BeforeAll
+    static void init() {
+        try {
+            Configuration.setDefaultApiClient(Config.defaultClient());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void testSetAndGetName() {
+        Settings settings = new Settings();
+        settings.setName("Test");
+        assertEquals("Test", settings.getName());
+    }
+
+    @Test
+    void testSetAndGetServiceEnabled() {
+        Settings settings = new Settings();
+        settings.setServiceEnabled(true);
+        assertTrue(settings.isServiceEnabled());
+    }
+
+    @Test
+    void testSetAndGetLogToConsole() {
+        Settings settings = new Settings();
+        settings.setLogToConsole(false);
+        assertFalse(settings.isLogToConsole());
+    }
+
+    @Test
+    void testSetAndGetLogToFile() {
+        Settings settings = new Settings();
+        settings.setLogToFile(true);
+        assertTrue(settings.isLogToFile());
+    }
+
+    @Test
+    void testSetAndGetServiceFileName() {
+        Settings settings = new Settings();
+        settings.setServiceFileName("Test.yaml");
+        assertEquals("Test.yaml", settings.getServiceFileName());
+    }
+
+    @Test
+    void testSetAndGetDeploymentFileName() {
+        Settings settings = new Settings();
+        settings.setDeploymentFileName("Test.yaml");
+        assertEquals("Test.yaml", settings.getDeploymentFileName());
+    }
 }

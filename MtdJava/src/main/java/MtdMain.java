@@ -17,10 +17,12 @@
  */
 
 import controller.MenuController;
+import controller.MtdController;
 import controller.SettingsController;
 import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.util.Config;
 
+import java.io.File;
 import java.io.IOException;
 
 public class MtdMain {
@@ -34,25 +36,22 @@ public class MtdMain {
             MenuController menuController = new MenuController();
             menuController.showMenu();
         }
-        else {
-            // TODO: Run from saved settings
-            // TODO HEADLESS
+        else if (args.length == 1) {
            SettingsController settingsController = new SettingsController();
-
+            try {
+                settingsController.loadSettings(new File(args[0]));
+                MtdController mtdController = new MtdController(settingsController);
+                mtdController.runMtd();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        else {
+            System.out.println("Too many arguments. Argument should be a settings.yaml file");
         }
     }
 
-
-
-    // Flow 1: Menu -> Matar in settings -> sparar settings -> startar MTD baserat på settings.
-    // Flow 2: Startar mtd baserat på settings.
-
-    // Start commands.
-    // java mtd.jar
-    // java mtd.jar settings/config1.yaml
-
-    // todo settings
-    // - Name for file when saving
+    // todo
     // - Fix locations for files after compiling jar.
     // - Compile jar with maven
     // - Time between swaps

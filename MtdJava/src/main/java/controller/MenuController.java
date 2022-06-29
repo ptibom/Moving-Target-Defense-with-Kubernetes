@@ -46,6 +46,7 @@ public class MenuController {
                     MtdController mtdController = new MtdController(loadOptionSelected());
                     mtdController.runMtd(); // todo, run in async thread?
                     optionSelected = true;
+                    //todo
                     break;
                 case "3":
                     System.exit(0);

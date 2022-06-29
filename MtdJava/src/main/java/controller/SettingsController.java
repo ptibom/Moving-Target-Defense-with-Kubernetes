@@ -35,13 +35,13 @@ public class SettingsController {
         settings = yaml.load(file);
     }
 
-    public void setName(String name) throws Exception {
+    public void setName(String name) throws InvalidFileNameException {
         String filename = name.strip();
         if (filename.matches("^[A-z\\d]+(\\.yaml|\\.yml)$")) {
             settings.setName(filename);
         }
         else {
-            throw new InvalidFileNameException("File name must be alphanumeric and end with .yaml or .yml");
+            throw new InvalidFileNameException("File name must be alphanumeric and end with .yaml or .yml.");
         }
     }
 

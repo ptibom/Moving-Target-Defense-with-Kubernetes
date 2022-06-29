@@ -18,9 +18,11 @@
 
 package controller;
 
+import model.exception.InvalidFileNameException;
 import view.MenuView;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class MenuController {
@@ -37,35 +39,54 @@ public class MenuController {
             String input = sc.nextLine();
             switch (input.strip()) {
                 case "1":
-                    SettingsController settingsController = new SettingsController();
-
-                    boolean answer = askLoadBalancerQuestion(settingsController);
-                    if (answer) {
-                        askServiceFileQuestion(settingsController);
-                    }
-                    askFileLoggingQuestion(settingsController);
-                    askConsoleLoggingQuestion(settingsController);
-                    askDeploymentFileQuestion(settingsController);
-
-                    MtdController mtdController = new MtdController(settingsController);
-                    mtdController.runMtd(); // todo, run in async thread?
+                    createOptionSelected();
                     optionSelected = true;
                     break;
                 case "2":
+                    MtdController mtdController = new MtdController(loadOptionSelected());
+                    mtdController.runMtd(); // todo, run in async thread?
                     optionSelected = true;
-                    //todo
                     break;
                 case "3":
-                    //todo
-                    optionSelected = true;
-                    break;
-                case "4":
                     System.exit(0);
                     break;
                 default:
-                    menuView.printInvalidInput();
+                    menuView.printInvalidInput("Must be 1-3.");
             }
         }
+    }
+
+    public void createOptionSelected() {
+        SettingsController settingsController = new SettingsController();
+        inputNewSettingsName(settingsController);
+        boolean answer = askLoadBalancerQuestion(settingsController);
+        if (answer) {
+            askServiceFileQuestion(settingsController);
+        }
+        askFileLoggingQuestion(settingsController); // todo finish logging to file
+        askConsoleLoggingQuestion(settingsController);
+        askDeploymentFileQuestion(settingsController);
+        try {
+            settingsController.saveSettings();
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+        MtdController mtdController = new MtdController(settingsController);
+        mtdController.runMtd(); // todo, run in async thread?
+    }
+
+    public SettingsController loadOptionSelected() {
+        menuView.printLoadSettingsNameQuestion();
+        String fileName = inputFileName();
+        SettingsController settingsController = new SettingsController();
+        try {
+            settingsController.loadSettings(new File(fileName));
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+        return settingsController;
     }
 
     public boolean askLoadBalancerQuestion(SettingsController settingsController) {
@@ -103,6 +124,19 @@ public class MenuController {
         return new File(fileName).exists();
     }
 
+    public void inputNewSettingsName(SettingsController settingsController) {
+        menuView.printSettingsNameQuestion();
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            try {
+                settingsController.setName(sc.nextLine());
+                break;
+            } catch (InvalidFileNameException e) {
+                menuView.printInvalidInput(e.getMessage());
+            }
+        }
+    }
+
     public String inputFileName() {
         Scanner sc = new Scanner(System.in);
         while (true) {
@@ -116,7 +150,7 @@ public class MenuController {
                 }
             }
             else {
-                menuView.printInvalidInput();
+                menuView.printInvalidInput("Must be alphanumeric and end with .yaml or .yml.");
             }
         }
     }
@@ -135,7 +169,7 @@ public class MenuController {
                 break;
             }
             else {
-                menuView.printInvalidInput();
+                menuView.printInvalidInput("Must be y or n.");
             }
         }
         return answer;

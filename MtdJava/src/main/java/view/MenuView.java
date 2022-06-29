@@ -25,8 +25,8 @@ public class MenuView {
         System.out.println("Menu Options");
         System.out.println("1. Create & Run Settings File");
         System.out.println("2. Load & Run Settings File");
-        System.out.println("3. Edit Settings File");
-        System.out.println("4. Exit");
+        //System.out.println("3. Edit Settings File");
+        System.out.println("3. Exit");
         System.out.println("---------------------");
         System.out.println("Make a selection (number):");
     }
@@ -52,11 +52,19 @@ public class MenuView {
         System.out.println("Type your Deployment YAML file name (including .yaml):");
     }
 
-    public void printInvalidInput() {
-        System.out.println("Invalid input, try again:");
+    public void printInvalidInput(String message) {
+        System.out.println("Invalid input. " + message + " Try again:");
     }
 
     public void printFileNotExists() {
         System.out.println("The file does not exist. Try again.");
+    }
+
+    public void printSettingsNameQuestion() {
+        System.out.println("Name your settings file (including file ending .yaml or .yml):");
+    }
+
+    public void printLoadSettingsNameQuestion() {
+        System.out.println("Type the filename of the settings file (yaml):");
     }
 }

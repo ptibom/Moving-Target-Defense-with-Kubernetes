@@ -16,7 +16,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation;
+package model.kubernetes;
 
 import io.kubernetes.client.custom.V1Patch;
 import io.kubernetes.client.extended.kubectl.Kubectl;
@@ -27,9 +27,9 @@ import io.kubernetes.client.openapi.models.V1Deployment;
 import io.kubernetes.client.openapi.models.V1Pod;
 import io.kubernetes.client.openapi.models.V1PodList;
 import io.kubernetes.client.util.Yaml;
-import model.encapsulation.exception.ApplyException;
-import model.encapsulation.exception.DeploymentDeleteException;
-import model.encapsulation.exception.DeploymentNotFoundException;
+import model.kubernetes.exception.ApplyException;
+import model.kubernetes.exception.DeploymentDeleteException;
+import model.kubernetes.exception.DeploymentNotFoundException;
 
 import java.io.File;
 import java.io.IOException;

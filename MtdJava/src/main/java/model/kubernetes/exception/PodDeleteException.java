@@ -16,14 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation.exception;
+package model.kubernetes.exception;
 
-public class NodeNotFoundException extends Exception {
-
-    public NodeNotFoundException() {
+public class PodDeleteException extends Exception {
+    public PodDeleteException() {
     }
 
-    public NodeNotFoundException(String message) {
+    public PodDeleteException(String message) {
         super(message);
     }
 }

@@ -16,21 +16,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation;
+package model.kubernetes;
 
 import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.util.Config;
-import model.encapsulation.exception.*;
+import model.kubernetes.exception.NodeNotFoundException;
 import org.junit.jupiter.api.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class TestService {
+public class TestNodeTools {
+
     @BeforeAll
     static void init() {
         try {
@@ -40,23 +39,10 @@ public class TestService {
         }
     }
 
+    // This test requires 2 worker nodes, master not included.
     @Test
-    @Order(1)
-    void testCreateService() throws IOException, ApplyException, KubeServiceNotFoundException {
-        IService service = new Service(new File("TestService.yaml"));
-        service.apply();
-        service = new Service("lb-service", "default");
-        assertNotNull(service);
-    }
-
-    @Test
-    @Order(2)
-    void testDeleteService() throws KubeServiceNotFoundException, KubeServiceDeleteException {
-        IService service = new Service("lb-service", "default");
-        service.delete();
-
-        assertThrows(KubeServiceNotFoundException.class, () -> {
-            IService tmp = new Service("lb-service", "default");
-        });
+    void testGetWorkerNodes() throws NodeNotFoundException {
+        List<INode> nodeList = NodeTools.getWorkerNodes();
+        assertEquals(2, nodeList.size());
     }
 }

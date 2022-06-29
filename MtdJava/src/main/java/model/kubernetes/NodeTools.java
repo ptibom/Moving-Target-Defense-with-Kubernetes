@@ -16,13 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation;
+package model.kubernetes;
 
 import io.kubernetes.client.extended.kubectl.Kubectl;
 import io.kubernetes.client.extended.kubectl.exception.KubectlException;
 import io.kubernetes.client.openapi.models.V1Node;
 import io.kubernetes.client.util.generic.options.ListOptions;
-import model.encapsulation.exception.NodeNotFoundException;
+import model.kubernetes.exception.NodeNotFoundException;
 
 import java.util.LinkedList;
 import java.util.List;

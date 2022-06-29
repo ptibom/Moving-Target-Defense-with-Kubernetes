@@ -16,12 +16,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation.exception;
+package model.kubernetes;
 
-public class DeploymentNotFoundException extends Exception {
-    public DeploymentNotFoundException() {}
+import model.kubernetes.exception.NodeLabelException;
+import model.kubernetes.exception.PodNotFoundException;
 
-    public DeploymentNotFoundException(String message) {
-        super(message);
-    }
+import java.util.List;
+import java.util.Map;
+
+public interface INode {
+    String getName();
+    Map<String, String> getLabels();
+    void addLabel(String key, String value) throws NodeLabelException;
+    List<IPod> getPods() throws PodNotFoundException;
+    void deleteLabel(String key) throws NodeLabelException;
 }

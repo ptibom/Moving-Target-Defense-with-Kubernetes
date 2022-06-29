@@ -16,21 +16,19 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation;
+package model.kubernetes;
 
 import io.kubernetes.client.extended.kubectl.Kubectl;
 import io.kubernetes.client.extended.kubectl.exception.KubectlException;
 import io.kubernetes.client.openapi.models.V1Pod;
-import io.kubernetes.client.proto.V1;
 import io.kubernetes.client.util.Yaml;
-import model.encapsulation.exception.ApplyException;
-import model.encapsulation.exception.PodDeleteException;
-import model.encapsulation.exception.PodLabelException;
-import model.encapsulation.exception.PodNotFoundException;
+import model.kubernetes.exception.ApplyException;
+import model.kubernetes.exception.PodDeleteException;
+import model.kubernetes.exception.PodLabelException;
+import model.kubernetes.exception.PodNotFoundException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 public class Pod implements IPod {

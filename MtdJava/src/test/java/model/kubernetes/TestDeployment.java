@@ -16,11 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation;
+package model.kubernetes;
 
 import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.util.Config;
-import model.encapsulation.exception.*;
+import model.kubernetes.exception.*;
 import org.junit.jupiter.api.*;
 
 import java.io.File;

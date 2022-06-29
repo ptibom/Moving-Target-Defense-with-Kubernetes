@@ -16,12 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation;
+package model.kubernetes.exception;
 
-import model.encapsulation.exception.ApplyException;
-import model.encapsulation.exception.KubeServiceDeleteException;
+public class PodNotFoundException extends Exception {
+    public PodNotFoundException() {
+    }
 
-public interface IService {
-    void apply() throws ApplyException;
-    void delete() throws KubeServiceDeleteException;
+    public PodNotFoundException(String message) {
+        super(message);
+    }
 }

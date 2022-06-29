@@ -21,11 +21,11 @@ package controller.algs;
 import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.util.Config;
 
-import model.encapsulation.Deployment;
-import model.encapsulation.IDeployment;
-import model.encapsulation.IService;
-import model.encapsulation.Service;
-import model.encapsulation.exception.*;
+import model.kubernetes.Deployment;
+import model.kubernetes.IDeployment;
+import model.kubernetes.IService;
+import model.kubernetes.Service;
+import model.kubernetes.exception.*;
 import org.junit.jupiter.api.*;
 
 import java.io.File;

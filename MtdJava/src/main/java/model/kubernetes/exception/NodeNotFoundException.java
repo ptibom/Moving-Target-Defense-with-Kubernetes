@@ -16,14 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation.exception;
+package model.kubernetes.exception;
 
-public class ApplyException extends Exception {
+public class NodeNotFoundException extends Exception {
 
-    public ApplyException(String message) {
-        super(message);
+    public NodeNotFoundException() {
     }
 
-    public ApplyException() {
+    public NodeNotFoundException(String message) {
+        super(message);
     }
 }

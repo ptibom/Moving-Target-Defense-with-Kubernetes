@@ -16,18 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation;
+package model.kubernetes.exception;
 
-import model.encapsulation.exception.NodeLabelException;
-import model.encapsulation.exception.PodNotFoundException;
+public class KubeServiceNotFoundException extends Exception {
+    public KubeServiceNotFoundException() {
+    }
 
-import java.util.List;
-import java.util.Map;
-
-public interface INode {
-    String getName();
-    Map<String, String> getLabels();
-    void addLabel(String key, String value) throws NodeLabelException;
-    List<IPod> getPods() throws PodNotFoundException;
-    void deleteLabel(String key) throws NodeLabelException;
+    public KubeServiceNotFoundException(String message) {
+        super(message);
+    }
 }

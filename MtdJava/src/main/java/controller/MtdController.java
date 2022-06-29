@@ -20,12 +20,11 @@ package controller;
 
 import controller.algs.IMtdAlg;
 import controller.algs.MtdRandom;
-import model.Settings;
-import model.encapsulation.Deployment;
-import model.encapsulation.IDeployment;
-import model.encapsulation.IService;
-import model.encapsulation.Service;
-import model.encapsulation.exception.ApplyException;
+import model.kubernetes.Deployment;
+import model.kubernetes.IDeployment;
+import model.kubernetes.IService;
+import model.kubernetes.Service;
+import model.kubernetes.exception.ApplyException;
 import view.MtdView;
 
 import java.io.File;

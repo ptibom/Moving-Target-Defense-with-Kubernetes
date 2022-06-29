@@ -16,13 +16,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation.exception;
+package model.kubernetes.exception;
 
-public class PodLabelException extends Exception {
-    public PodLabelException() {
-    }
+public class DeploymentNotFoundException extends Exception {
+    public DeploymentNotFoundException() {}
 
-    public PodLabelException(String message) {
+    public DeploymentNotFoundException(String message) {
         super(message);
     }
 }

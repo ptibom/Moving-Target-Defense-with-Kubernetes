@@ -16,13 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation;
+package model.kubernetes;
 
 
 import io.kubernetes.client.openapi.Configuration;
 import io.kubernetes.client.util.Config;
-import model.encapsulation.exception.NodeLabelException;
-import model.encapsulation.exception.NodeNotFoundException;
+import model.kubernetes.exception.NodeLabelException;
+import model.kubernetes.exception.NodeNotFoundException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 

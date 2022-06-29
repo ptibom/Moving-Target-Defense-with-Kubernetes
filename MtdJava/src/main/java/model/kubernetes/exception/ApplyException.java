@@ -16,13 +16,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation.exception;
+package model.kubernetes.exception;
 
-public class KubeServiceDeleteException extends Exception {
-    public KubeServiceDeleteException() {
+public class ApplyException extends Exception {
+
+    public ApplyException(String message) {
+        super(message);
     }
 
-    public KubeServiceDeleteException(String message) {
-        super(message);
+    public ApplyException() {
     }
 }

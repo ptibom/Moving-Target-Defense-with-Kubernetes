@@ -16,11 +16,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation;
+package model.kubernetes;
 
-import model.encapsulation.exception.ApplyException;
-import model.encapsulation.exception.PodDeleteException;
-import model.encapsulation.exception.PodLabelException;
+import model.kubernetes.exception.ApplyException;
+import model.kubernetes.exception.PodDeleteException;
+import model.kubernetes.exception.PodLabelException;
 
 import java.util.Map;
 

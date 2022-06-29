@@ -18,8 +18,8 @@
 
 package controller.algs;
 
-import model.encapsulation.*;
-import model.encapsulation.exception.*;
+import model.kubernetes.*;
+import model.kubernetes.exception.*;
 
 import java.util.ArrayList;
 import java.util.List;

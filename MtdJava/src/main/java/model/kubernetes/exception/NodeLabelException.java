@@ -16,13 +16,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation.exception;
+package model.kubernetes.exception;
 
-public class KubeServiceNotFoundException extends Exception {
-    public KubeServiceNotFoundException() {
+public class NodeLabelException extends Exception {
+    public NodeLabelException() {
     }
 
-    public KubeServiceNotFoundException(String message) {
+    public NodeLabelException(String message) {
         super(message);
     }
 }

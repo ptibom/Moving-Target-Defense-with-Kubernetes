@@ -16,16 +16,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation;
+package model.kubernetes;
 
 import io.kubernetes.client.extended.kubectl.Kubectl;
 import io.kubernetes.client.extended.kubectl.exception.KubectlException;
-import io.kubernetes.client.openapi.models.V1Deployment;
 import io.kubernetes.client.openapi.models.V1Service;
 import io.kubernetes.client.util.Yaml;
-import model.encapsulation.exception.ApplyException;
-import model.encapsulation.exception.KubeServiceDeleteException;
-import model.encapsulation.exception.KubeServiceNotFoundException;
+import model.kubernetes.exception.ApplyException;
+import model.kubernetes.exception.KubeServiceDeleteException;
+import model.kubernetes.exception.KubeServiceNotFoundException;
 
 import java.io.File;
 import java.io.IOException;

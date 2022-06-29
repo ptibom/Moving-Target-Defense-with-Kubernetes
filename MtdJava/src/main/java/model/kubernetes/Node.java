@@ -16,17 +16,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package model.encapsulation;
+package model.kubernetes;
 
 import io.kubernetes.client.extended.kubectl.Kubectl;
 import io.kubernetes.client.extended.kubectl.exception.KubectlException;
 import io.kubernetes.client.openapi.models.V1Node;
 import io.kubernetes.client.openapi.models.V1Pod;
-import io.kubernetes.client.openapi.models.V1PodList;
 import io.kubernetes.client.util.generic.options.ListOptions;
-import model.encapsulation.exception.NodeLabelException;
-import model.encapsulation.exception.NodeNotFoundException;
-import model.encapsulation.exception.PodNotFoundException;
+import model.kubernetes.exception.NodeLabelException;
+import model.kubernetes.exception.NodeNotFoundException;
+import model.kubernetes.exception.PodNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;

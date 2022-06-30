@@ -18,7 +18,7 @@ spec:
       initContainers:
         - name: init-myservice
           image: nginx:1.14.2
-          command: ['sh', '-c', "echo $MY_NODE_NAME Deployment1 > /usr/share/nginx/html/index.html"]
+          command: ['sh', '-c', "echo $MY_NODE_NAME Deployment2 > /usr/share/nginx/html/index.html"]
           env:
             - name: MY_NODE_NAME
               valueFrom:

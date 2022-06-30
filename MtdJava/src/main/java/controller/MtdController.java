@@ -29,6 +29,8 @@ import view.MtdView;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MtdController {
     SettingsController settingsController;
@@ -39,17 +41,22 @@ public class MtdController {
     }
 
     public void runMtd() {
-        String fileName = "DeploymentPrintNode.yaml";
+        String fileName1 = "DeploymentPrintNode.yaml";
+        String fileName2 = "TestDeployment.yaml";
         try {
             if (settingsController.isLoadBalancing()) {
                 IService service = new Service(new File(settingsController.getServiceFileName()));
                 service.apply();
             }
-            IDeployment deployment = new Deployment(new File(fileName));
-            IMtdAlg alg = new MtdRandom(deployment, 5000);
+            IDeployment deployment1 = new Deployment(new File(fileName1));
+            IDeployment deployment2 = new Deployment(new File(fileName2));
+            List<IDeployment> deploymentList = new ArrayList<>();
+            deploymentList.add(deployment1);
+            deploymentList.add(deployment2);
+            IMtdAlg alg = new MtdRandom(deploymentList, 5000);
             alg.run(10);
         } catch (IOException e) {
-            mtdView.printError("Could not find file: " + fileName);
+            mtdView.printError(String.format("Could not find file: %s or %s", fileName1, fileName2));
         } catch (ApplyException e) {
             mtdView.printError("Could not apply Service to cluster.");
         } catch (Exception e) {

@@ -30,6 +30,7 @@ import org.junit.jupiter.api.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,7 +49,9 @@ public class TestMtdRandom {
     @Test
     void testRun() throws Exception {
         IDeployment deployment = new Deployment(new File("TestDeployment.yaml"));
-        MtdRandom mtdRandom = new MtdRandom(deployment, 5000);
+        List<IDeployment> deployments = new ArrayList<>();
+        deployments.add(deployment);
+        MtdRandom mtdRandom = new MtdRandom(deployments, 5000);
         mtdRandom.setTestSuite(true);
         List<String> log = mtdRandom.run(10);
         String previousEntry = "";
@@ -66,7 +69,9 @@ public class TestMtdRandom {
         IService service = new Service(new File("TestService.yaml"));
         service.apply();
         IDeployment deployment = new Deployment(new File("DeploymentPrintNode.yaml"));
-        MtdRandom mtdRandom = new MtdRandom(deployment, 5000);
+        List<IDeployment> deployments = new ArrayList<>();
+        deployments.add(deployment);
+        MtdRandom mtdRandom = new MtdRandom(deployments, 5000);
         mtdRandom.setTestSuite(true);
         List<String> log = mtdRandom.run(10);
         String previousEntry = "";

@@ -27,24 +27,28 @@ import java.util.Random;
 
 public class MtdRandom implements IMtdAlg {
 
-    private IDeployment deployment;
+    private IDeployment currentDeployment;
     private int timeBetweenSwap; // Todo maybe add random time.
     private int currentIndex;
+    private int currentDeploymentIndex;
     private INode currentNode;
     private IPod currentPod;
     private static final String LABEL_KEY = "mtd/node";
     private static final String LABEL_VALUE = "active";
     private boolean testSuite = false;
     private boolean isRunning = false;
+    private List<IDeployment> deployments;
 
-    public MtdRandom(IDeployment deployment, int timeBetweenSwap) throws Exception {
-        this.deployment = deployment;
+    public MtdRandom(List<IDeployment> deployments, int timeBetweenSwap) throws Exception {
+        this.deployments = deployments;
         this.timeBetweenSwap = timeBetweenSwap;
         try {
             List<INode> nodeList = NodeTools.getWorkerNodes();
             Random random = new Random();
             currentIndex = random.nextInt(nodeList.size());
             currentNode = nodeList.get(currentIndex);
+            currentDeploymentIndex = random.nextInt(this.deployments.size());
+            currentDeployment = deployments.get(currentDeploymentIndex);
         } catch (NodeNotFoundException e) {
         } catch (IllegalArgumentException e) {
             throw new Exception("Not enough worker nodes."); // todo create a custom exception
@@ -65,11 +69,11 @@ public class MtdRandom implements IMtdAlg {
                     currentNode.addLabel(LABEL_KEY, LABEL_VALUE);
                     try {
                         // Delete old deployment if exists.
-                        IDeployment oldDeployment = new Deployment(deployment.getName(), "default");
+                        IDeployment oldDeployment = new Deployment(currentDeployment.getName(), "default");
                         oldDeployment.delete();
                     } catch (DeploymentNotFoundException | DeploymentDeleteException ignored) {
                     }
-                    deployment.apply();
+                    currentDeployment.apply();
 
                     Thread.sleep(timeBetweenSwap);
                     continue;
@@ -133,14 +137,24 @@ public class MtdRandom implements IMtdAlg {
                 System.out.println("------------");
 
                 Random random = new Random();
-                int randInt = random.nextInt(nodeList.size());
+                int randIntNode = random.nextInt(nodeList.size());
+                int randIntDeployment = random.nextInt(deployments.size());
 
                 // Swap active label on nodes.
                 currentNode.deleteLabel(LABEL_KEY);
-                currentNode = nodeList.get(randInt);
+                currentNode = nodeList.get(randIntNode);
                 currentNode.addLabel(LABEL_KEY, LABEL_VALUE);
 
-                deployment.rolloutRestart();
+                // Swap active deployment
+                IDeployment oldDeployment = currentDeployment;
+                currentDeployment = deployments.get(randIntDeployment);
+
+                if (oldDeployment == currentDeployment) {
+                    currentDeployment.rolloutRestart(); // Patches if same deployment.
+                }
+                else {
+                    currentDeployment.apply(); // Apply if a different deployment.
+                }
 
                 // Update pod statuses.
                 currentNode = new Node(currentNode.getName());

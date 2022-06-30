@@ -42,8 +42,10 @@ import java.util.Map;
 public class Deployment implements IDeployment {
 
     private V1Deployment v1Deployment;
+    private String filename;
 
     public Deployment(File file) throws IOException {
+        filename = file.getName();
         v1Deployment = (V1Deployment) Yaml.load(file);
     }
 
@@ -119,5 +121,10 @@ public class Deployment implements IDeployment {
     @Override
     public String getName() {
         return v1Deployment.getMetadata().getName();
+    }
+
+    @Override
+    public String getFileName() {
+        return filename;
     }
 }

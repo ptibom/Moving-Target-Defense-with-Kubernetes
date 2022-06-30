@@ -27,6 +27,7 @@ import java.util.List;
 public interface IDeployment {
     String getFileName();
     void apply() throws ApplyException;
+    void applyAsPatch() throws ApplyException;
     void rolloutRestart() throws ApplyException;
     List<IPod> getPods() throws DeploymentNotFoundException;
     void delete() throws DeploymentDeleteException;

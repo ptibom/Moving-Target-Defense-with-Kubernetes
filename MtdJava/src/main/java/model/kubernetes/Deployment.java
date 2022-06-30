@@ -88,6 +88,21 @@ public class Deployment implements IDeployment {
     }
 
     @Override
+    // Only when already applied before
+    public void applyAsPatch() throws ApplyException {
+        try {
+            v1Deployment = Kubectl.patch(V1Deployment.class)
+                    .namespace(v1Deployment.getMetadata().getNamespace())
+                    .name(v1Deployment.getMetadata().getName())
+                    .patchType(V1Patch.PATCH_FORMAT_STRATEGIC_MERGE_PATCH)
+                    .patchContent(new V1Patch(v1Deployment.toString()))
+                    .execute();
+        } catch (KubectlException e) {
+            throw new ApplyException(e.getMessage());
+        }
+    }
+
+    @Override
     public void rolloutRestart() throws ApplyException {
         Map<String, String> restart = new HashMap<>();
         restart.put("date", Instant.now().getEpochSecond() + "");

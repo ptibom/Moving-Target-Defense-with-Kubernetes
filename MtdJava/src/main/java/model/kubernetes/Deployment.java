@@ -57,8 +57,8 @@ public class Deployment implements IDeployment {
                     .namespace(namespace)
                     .name(name)
                     .execute();
-            v1DeploymentUnmodified = (V1Deployment) Yaml.load(filename);
-        } catch (KubectlException | IOException e) {
+            v1DeploymentUnmodified = null;
+        } catch (KubectlException e) {
             throw new DeploymentNotFoundException(e.getMessage());
         }
     }

@@ -41,11 +41,6 @@ public class MtdController {
     }
 
     public void runMtd() {
-        // todo fix multiple filename input
-        String fileName1 = "DeploymentPrintNode.yaml";
-        String fileName2 = "DeploymentPrintNode2.yaml";
-        settingsController.addDeploymentFilename(fileName1);
-        settingsController.addDeploymentFilename(fileName2);
 
         try {
             if (settingsController.isLoadBalancing()) {
@@ -60,7 +55,7 @@ public class MtdController {
             IMtdAlg alg = new MtdRandom(deploymentList, 5000);
             alg.run(10);
         } catch (IOException e) {
-            mtdView.printError(String.format("Could not find file: %s or %s", fileName1, fileName2));
+            mtdView.printError(String.format("Could not find Deployment file."));
         } catch (ApplyException e) {
             mtdView.printError("Could not apply Service to cluster.");
         } catch (Exception e) {

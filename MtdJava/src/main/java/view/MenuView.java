@@ -52,6 +52,10 @@ public class MenuView {
         System.out.println("Type your Deployment YAML file name (including .yaml):");
     }
 
+    public void printDeploymentFileNameQuestionRepeated() {
+        System.out.println("Do you want to add another Deployment? (y/n)");
+    }
+
     public void printInvalidInput(String message) {
         System.out.println("Invalid input. " + message + " Try again:");
     }

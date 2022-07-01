@@ -1,0 +1,8 @@
+name: "Test.yaml"
+serviceEnabled: true
+serviceFileName: "TestService.yaml"
+deploymentFileNames:
+- "DeploymentPrintNode.yaml"
+- "DeploymentPrintNode2.yaml"
+logToConsole: false
+logToFile: false

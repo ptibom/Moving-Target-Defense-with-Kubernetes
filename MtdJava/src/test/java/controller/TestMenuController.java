@@ -129,7 +129,7 @@ public class TestMenuController {
         MenuController menuController = new MenuController();
         SettingsController settingsController = new SettingsController();
         menuController.askDeploymentFileQuestion(settingsController);
-        assertEquals("DeploymentPrintNode.yaml", settingsController.getDeploymentFileName());
+        assertEquals("DeploymentPrintNode.yaml", settingsController.getDeploymentFileNames());
     }
 
     @Test

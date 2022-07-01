@@ -18,11 +18,14 @@
 
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Settings {
     private String name;
     private boolean serviceEnabled = false; // LoadBalancer
     private String serviceFileName = "TestService.yaml";
-    private String deploymentFileName = ""; // todo implement deployment filename
+    private List<String> deploymentFileNames = new ArrayList<>();
     private boolean logToConsole = true;
     private boolean logToFile = true;
 
@@ -66,11 +69,11 @@ public class Settings {
         this.serviceFileName = serviceFileName;
     }
 
-    public String getDeploymentFileName() {
-        return deploymentFileName;
+    public List<String> getDeploymentFileNames() {
+        return deploymentFileNames;
     }
 
-    public void setDeploymentFileName(String deploymentFileName) {
-        this.deploymentFileName = deploymentFileName;
+    public void setDeploymentFileNames(List<String> deploymentFileNames) {
+        this.deploymentFileNames = deploymentFileNames;
     }
 }

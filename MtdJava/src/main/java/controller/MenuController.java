@@ -118,7 +118,7 @@ public class MenuController {
     public void askDeploymentFileQuestion(SettingsController settingsController) {
         menuView.printDeploymentFileNameQuestion();
         String fileName = inputFileName();
-        settingsController.setDeploymentFileName(fileName);
+        settingsController.addDeploymentFilename(fileName);
     }
 
     private boolean checkFileExists(String fileName) {

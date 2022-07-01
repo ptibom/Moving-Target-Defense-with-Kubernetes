@@ -25,7 +25,7 @@ import model.exception.InvalidFileNameException;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Scanner;
+import java.util.List;
 
 public class SettingsController {
     private Settings settings = new Settings();
@@ -83,15 +83,15 @@ public class SettingsController {
         return settings.getServiceFileName();
     }
 
-    public String getDeploymentFileName() {
-        return settings.getDeploymentFileName();
+    public List<String> getDeploymentFileNames() {
+        return settings.getDeploymentFileNames();
     }
 
     public void setServiceFileName(String fileName) {
         settings.setServiceFileName(fileName);
     }
 
-    public void setDeploymentFileName(String fileName) {
-        settings.setDeploymentFileName(fileName);
+    public void addDeploymentFilename(String fileName) {
+        settings.getDeploymentFileNames().add(fileName);
     }
 }

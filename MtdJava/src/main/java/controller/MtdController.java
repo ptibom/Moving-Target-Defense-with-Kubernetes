@@ -44,16 +44,19 @@ public class MtdController {
         // todo fix multiple filename input
         String fileName1 = "DeploymentPrintNode.yaml";
         String fileName2 = "DeploymentPrintNode2.yaml";
+        settingsController.addDeploymentFilename(fileName1);
+        settingsController.addDeploymentFilename(fileName2);
+
         try {
             if (settingsController.isLoadBalancing()) {
                 IService service = new Service(new File(settingsController.getServiceFileName()));
                 service.apply();
             }
-            IDeployment deployment1 = new Deployment(new File(fileName1));
-            IDeployment deployment2 = new Deployment(new File(fileName2));
             List<IDeployment> deploymentList = new ArrayList<>();
-            deploymentList.add(deployment1);
-            deploymentList.add(deployment2);
+            for (String filename : settingsController.getDeploymentFileNames()) {
+                IDeployment deployment = new Deployment(new File(filename));
+                deploymentList.add(deployment);
+            }
             IMtdAlg alg = new MtdRandom(deploymentList, 5000);
             alg.run(10);
         } catch (IOException e) {

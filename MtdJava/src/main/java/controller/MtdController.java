@@ -41,6 +41,7 @@ public class MtdController {
     }
 
     public void runMtd() {
+        // todo fix multiple filename input
         String fileName1 = "DeploymentPrintNode.yaml";
         String fileName2 = "DeploymentPrintNode2.yaml";
         try {

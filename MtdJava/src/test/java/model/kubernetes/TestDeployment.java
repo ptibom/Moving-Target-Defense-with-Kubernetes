@@ -83,6 +83,25 @@ public class TestDeployment {
     }
 
     @Test
+    @Order(4)
+    void testMultipleApply() throws IOException, ApplyException, InterruptedException {
+        Deployment deployment = new Deployment(new File("DeploymentPrintNode.yaml"));
+        Deployment deployment2 = new Deployment(new File("DeploymentPrintNode2.yaml"));
+
+        System.out.println("Applying 1");
+        deployment.apply();
+        Thread.sleep(2000);
+        System.out.println("Applying 2");
+        deployment2.apply();
+        Thread.sleep(2000);
+        System.out.println("Applying 1");
+        deployment.apply();
+        Thread.sleep(2000);
+        System.out.println("Applying 2");
+        deployment2.apply();
+    }
+
+    @Test
     @Order(10)
     void testDeleteDeployment() throws InterruptedException, DeploymentDeleteException {
         try {

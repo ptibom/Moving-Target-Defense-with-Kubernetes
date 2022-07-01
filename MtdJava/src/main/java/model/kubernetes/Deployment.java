@@ -23,10 +23,9 @@ import io.kubernetes.client.extended.kubectl.Kubectl;
 import io.kubernetes.client.extended.kubectl.exception.KubectlException;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
-import io.kubernetes.client.openapi.models.V1Deployment;
-import io.kubernetes.client.openapi.models.V1Pod;
-import io.kubernetes.client.openapi.models.V1PodList;
+import io.kubernetes.client.openapi.models.*;
 import io.kubernetes.client.util.Yaml;
+import io.kubernetes.client.util.generic.options.UpdateOptions;
 import model.kubernetes.exception.ApplyException;
 import model.kubernetes.exception.DeploymentDeleteException;
 import model.kubernetes.exception.DeploymentNotFoundException;
@@ -42,20 +41,24 @@ import java.util.Map;
 public class Deployment implements IDeployment {
 
     private V1Deployment v1Deployment;
+    private final V1Deployment v1DeploymentUnmodified;
     private String filename;
 
     public Deployment(File file) throws IOException {
         filename = file.getName();
         v1Deployment = (V1Deployment) Yaml.load(file);
+        v1DeploymentUnmodified = (V1Deployment) Yaml.load(file);
     }
 
+    // TODO filename not set
     public Deployment(String name, String namespace) throws DeploymentNotFoundException {
         try {
             v1Deployment = Kubectl.get(V1Deployment.class)
                     .namespace(namespace)
                     .name(name)
                     .execute();
-        } catch (KubectlException e) {
+            v1DeploymentUnmodified = (V1Deployment) Yaml.load(filename);
+        } catch (KubectlException | IOException e) {
             throw new DeploymentNotFoundException(e.getMessage());
         }
     }
@@ -80,8 +83,7 @@ public class Deployment implements IDeployment {
     public void apply() throws ApplyException {
         try {
             v1Deployment = Kubectl.apply(V1Deployment.class)
-                    .resource(v1Deployment)
-                    .fieldManager(null)
+                    .resource(v1DeploymentUnmodified)
                     .execute();
         } catch (KubectlException e) {
             throw new ApplyException(e.getMessage());

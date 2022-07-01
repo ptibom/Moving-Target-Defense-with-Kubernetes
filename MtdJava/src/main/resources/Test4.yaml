@@ -1,5 +1,5 @@
 name: "Settings.yaml"
-serviceEnabled: false
+serviceEnabled: true
 serviceFileName: "TestService.yaml"
 deploymentFileName: "TestDeployment.yaml"
 logToConsole: true

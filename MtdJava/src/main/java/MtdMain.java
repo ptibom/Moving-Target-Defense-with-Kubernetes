@@ -52,8 +52,6 @@ public class MtdMain {
     }
 
     // todo
-    // - Fix locations for files after compiling jar.
-    // - Compile jar with maven
     // - Time between swaps
     // - Random interval time
     // - Alg selection (maybe)

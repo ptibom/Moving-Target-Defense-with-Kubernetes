@@ -18,10 +18,13 @@
 
 package controller.algs;
 
+import model.kubernetes.IDeployment;
+
 import java.util.List;
 
 public interface IMtdAlg {
     List<String> run(int nSwaps);
+    List<String> run(List<IDeployment> deployments, int nSwaps);
     void stop();
     void setTimeBetweenSwap(int milliseconds);
     int getTimeBetweenSwap();

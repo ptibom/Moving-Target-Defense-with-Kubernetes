@@ -33,9 +33,13 @@ public class MtdRandom implements IMtdAlg {
     private int currentDeploymentIndex;
     private INode currentNode;
     private IPod currentPod;
+    // Label key for the active k8 node
     private static final String LABEL_KEY = "mtd/node";
+    // Label value for the active K8 node.
     private static final String LABEL_VALUE = "active";
+    // Enable while running test suite
     private boolean testSuite = false;
+    // Marks if it's the first iteration of running the alg.
     private boolean isRunning = false;
     private List<IDeployment> deployments;
 
@@ -43,6 +47,7 @@ public class MtdRandom implements IMtdAlg {
         this.deployments = deployments;
         this.timeBetweenSwap = timeBetweenSwap;
         try {
+            // Pick a random node and deployment, from available nodes/deployments, to start the alg with.
             List<INode> nodeList = NodeTools.getWorkerNodes();
             Random random = new Random();
             currentIndex = random.nextInt(nodeList.size());
@@ -60,12 +65,15 @@ public class MtdRandom implements IMtdAlg {
         try {
             List<String> log = new ArrayList<>();
             for (int i = 0; i < nSwaps; i++) {
+                // Check if initial iteration
                 if (!isRunning) {
                     isRunning = true;
+                    // Clean up old labels (if alg ran before)
                     List<INode> nodeList = NodeTools.getWorkerNodes();
                     for (INode node : nodeList) {
                         node.deleteLabel(LABEL_KEY);
                     }
+                    // Add Active label to the randomly selected current node
                     currentNode.addLabel(LABEL_KEY, LABEL_VALUE);
                     try {
                         // Delete old deployment if exists.
@@ -73,8 +81,10 @@ public class MtdRandom implements IMtdAlg {
                         oldDeployment.delete();
                     } catch (DeploymentNotFoundException | DeploymentDeleteException ignored) {
                     }
+                    // Apply deployment, spins up pods etc.
                     currentDeployment.apply();
 
+                    // Wait a set time
                     Thread.sleep(timeBetweenSwap);
                     continue;
                 }
@@ -172,6 +182,11 @@ public class MtdRandom implements IMtdAlg {
             e.printStackTrace();
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public List<String> run(List<IDeployment> deployments, int nSwaps) {
+        return null;
     }
 
     @Override

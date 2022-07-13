@@ -48,11 +48,15 @@ public class TestMtdRandomV2 {
 
     @Test
     void testRun() throws Exception {
+        //IService service = new Service(new File("TestService.yaml"));
+        //service.apply();
         IDeployment deployment = new Deployment(new File("DeploymentPrintNode.yaml"));
+        IDeployment deployment2 = new Deployment(new File("DeploymentPrintNode2.yaml"));
         List<IDeployment> deployments = new ArrayList<>();
         deployments.add(deployment);
-        IMtdAlg mtdRandom = new MtdRandomV2(deployments, 5000);
-        List<String> log = mtdRandom.run(10);
+        deployments.add(deployment2);
+        IMtdAlg mtdRandom = new MtdRandomV2(deployments, 1000);
+        List<String> log = mtdRandom.run(100);
 
         String previousEntry = "";
         System.out.println("Printing all swaps from log: ");
@@ -61,6 +65,16 @@ public class TestMtdRandomV2 {
             assertNotEquals(previousEntry, s);
             previousEntry = s;
         }
+    }
+
+    //@AfterAll
+    static void deleteDeployment() throws DeploymentDeleteException, DeploymentNotFoundException,
+            KubeServiceDeleteException, KubeServiceNotFoundException {
+
+        IDeployment deployment = new Deployment("nginx-deployment", "default");
+        deployment.delete();
+        IService service = new Service("lb-service", "default");
+        service.delete();
     }
 
 }

@@ -100,12 +100,12 @@ public class MtdRandomV2 implements IMtdAlg {
                 // Choose a random deployment, can select same again
                 int randIntDeployment = random.nextInt(deployments.size());
 
-                log.add(currentNode.getName());
-
                 // Swap active deployment
                 IDeployment oldDeployment = currentDeployment;
                 currentDeployment = deployments.get(randIntDeployment);
-                System.out.println("Randomly selected Deployment: " + currentDeployment.getName());
+                System.out.println("Randomly selected Deployment: " + currentDeployment.getFileName());
+
+                log.add(String.format("Node: %s, Deployment: %s", currentNode.getName(), currentDeployment.getFileName()));
 
                 // If same deployment, do a restart to swap node.
                 if (oldDeployment == currentDeployment) {

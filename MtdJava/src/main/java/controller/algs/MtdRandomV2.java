@@ -21,6 +21,7 @@ package controller.algs;
 import model.kubernetes.*;
 import model.kubernetes.exception.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -33,16 +34,24 @@ public class MtdRandomV2 implements IMtdAlg {
     private static final String LABEL_VALUE = "active";
     private INode currentNode = null;
     private IDeployment currentDeployment = null;
+    private List<IDeployment> deployments;
 
 
-    // todo old, delete me
-    @Override
-    public List<String> run(int nSwaps) {
-        return null;
+    public MtdRandomV2(List<IDeployment> deployments, int timeBetweenSwap) {
+        this.timeBetweenSwap = timeBetweenSwap;
+        this.deployments = deployments;
     }
 
     @Override
-    public List<String> run(List<IDeployment> deployments, int nSwaps) {
+    public List<String> run() {
+        return run(0);
+    }
+
+    // todo fix return value
+    @Override
+    public List<String> run(int nSwaps) {
+        List<String> log = new ArrayList<>(); // Logs the swaps.
+
         // Delete old deployment if exists.
         System.out.println("Starting MTD alg.");
         try {
@@ -52,7 +61,13 @@ public class MtdRandomV2 implements IMtdAlg {
         } catch (DeploymentNotFoundException | DeploymentDeleteException ignored) {
         }
 
-        while (true) {
+        // Make it loop infinitely if nSwaps = 0.
+        int i = 0;
+        // Make it loop infinitely if nSwaps = 0.
+        if (nSwaps == 0) {
+            i = -1;
+        }
+        while (i < nSwaps) {
             try {
                 // Delete active labels if exists.
                 List<INode> nodeList = NodeTools.getWorkerNodes();
@@ -85,10 +100,12 @@ public class MtdRandomV2 implements IMtdAlg {
                 // Choose a random deployment, can select same again
                 int randIntDeployment = random.nextInt(deployments.size());
 
+                log.add(currentNode.getName());
+
                 // Swap active deployment
                 IDeployment oldDeployment = currentDeployment;
                 currentDeployment = deployments.get(randIntDeployment);
-                System.out.println("Randomly selevcted Deployment: " + currentDeployment.getName());
+                System.out.println("Randomly selected Deployment: " + currentDeployment.getName());
 
                 // If same deployment, do a restart to swap node.
                 if (oldDeployment == currentDeployment) {
@@ -117,14 +134,12 @@ public class MtdRandomV2 implements IMtdAlg {
                      PodNotFoundException e) {
                 e.printStackTrace();
             }
+            // Make it loop infinitely if nSwaps = 0.
+            if (nSwaps != 0) {
+                i++;
+            }
         }
-
-
-    }
-
-    @Override
-    public void stop() {
-
+        return log;
     }
 
     @Override

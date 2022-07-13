@@ -53,8 +53,8 @@ public class MtdController {
                 IDeployment deployment = new Deployment(new File(filename));
                 deploymentList.add(deployment);
             }
-            IMtdAlg alg = new MtdRandomV2();
-            alg.run(deploymentList, 10);
+            IMtdAlg alg = new MtdRandomV2(deploymentList, 5000);
+            alg.run();
         } catch (IOException e) {
             mtdView.printError(String.format("Could not find Deployment file."));
         } catch (ApplyException e) {

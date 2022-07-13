@@ -61,10 +61,21 @@ public class MtdRandom implements IMtdAlg {
     }
 
     @Override
+    public List<String> run() {
+        return run(0);
+    }
+
+    @Override
     public List<String> run(int nSwaps) {
         try {
             List<String> log = new ArrayList<>();
-            for (int i = 0; i < nSwaps; i++) {
+
+            int i = 0;
+            // Make it loop infinitely if nSwaps = 0.
+            if (nSwaps == 0) {
+                i = -1;
+            }
+            while (i < nSwaps) {
                 // Check if initial iteration
                 if (!isRunning) {
                     isRunning = true;
@@ -174,6 +185,11 @@ public class MtdRandom implements IMtdAlg {
                 }
                 currentPod = currentNode.getPods().get(0);
                 Thread.sleep(timeBetweenSwap);
+
+                // Make it loop infinitely if nSwaps = 0.
+                if (nSwaps != 0) {
+                    i++;
+                }
             }
 
             return log;
@@ -182,16 +198,6 @@ public class MtdRandom implements IMtdAlg {
             e.printStackTrace();
         }
         return new ArrayList<>();
-    }
-
-    @Override
-    public List<String> run(List<IDeployment> deployments, int nSwaps) {
-        return null;
-    }
-
-    @Override
-    public void stop() {
-
     }
 
     @Override

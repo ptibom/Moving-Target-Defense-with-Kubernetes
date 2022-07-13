@@ -48,7 +48,7 @@ public class TestMtdRandom {
 
     @Test
     void testRun() throws Exception {
-        IDeployment deployment = new Deployment(new File("TestDeployment.yaml"));
+        IDeployment deployment = new Deployment(new File("DeploymentPrintNode.yaml"));
         List<IDeployment> deployments = new ArrayList<>();
         deployments.add(deployment);
         MtdRandom mtdRandom = new MtdRandom(deployments, 5000);

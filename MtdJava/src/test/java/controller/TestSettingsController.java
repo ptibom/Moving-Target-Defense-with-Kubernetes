@@ -34,7 +34,7 @@ public class TestSettingsController {
     void tempTest() throws IOException {
 
         Settings settings = new Settings();
-        settings.setDeploymentFileName("TestDeployment.yaml");
+        // settings.setDeploymentFileName("TestDeployment.yaml");
         settings.setLogToConsole(true);
         settings.setLogToFile(false);
         settings.setServiceFileName("TestService.yaml");

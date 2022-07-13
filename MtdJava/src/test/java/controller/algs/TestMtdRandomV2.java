@@ -51,7 +51,8 @@ public class TestMtdRandomV2 {
         IDeployment deployment = new Deployment(new File("DeploymentPrintNode.yaml"));
         List<IDeployment> deployments = new ArrayList<>();
         deployments.add(deployment);
-        IMtdAlg mtdRandom = new MtdRandom(deployments, 5000);
+        IMtdAlg mtdRandom = new MtdRandomV2();
+        mtdRandom.run(deployments, 5000);
     }
 
 }

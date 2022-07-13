@@ -26,7 +26,7 @@ import java.util.Random;
 
 public class MtdRandomV2 implements IMtdAlg {
 
-    private int timeBetweenSwap;
+    private int timeBetweenSwap = 5000;
     // Label key for the active k8 node
     private static final String LABEL_KEY = "mtd/node";
     // Label value for the active K8 node.
@@ -103,7 +103,7 @@ public class MtdRandomV2 implements IMtdAlg {
 
                 // Find if correct pod is running.
                 System.out.println("Trying to find the new pod...");
-                while (!(currentNode.getPods().size() == 1 && currentNode.getPods().get(0).getPhase().equals("running"))) {
+                while (!(currentNode.getPods().size() == 1 && currentNode.getPods().get(0).getPhase().equalsIgnoreCase("running"))) {
                     System.out.println("Did not find new pod, waiting 1 second.");
                     Thread.sleep(1000);
                     // Refresh node

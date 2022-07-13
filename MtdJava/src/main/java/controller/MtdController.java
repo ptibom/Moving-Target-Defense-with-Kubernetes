@@ -20,6 +20,7 @@ package controller;
 
 import controller.algs.IMtdAlg;
 import controller.algs.MtdRandom;
+import controller.algs.MtdRandomV2;
 import model.kubernetes.Deployment;
 import model.kubernetes.IDeployment;
 import model.kubernetes.IService;
@@ -52,8 +53,8 @@ public class MtdController {
                 IDeployment deployment = new Deployment(new File(filename));
                 deploymentList.add(deployment);
             }
-            IMtdAlg alg = new MtdRandom(deploymentList, 5000);
-            alg.run(10);
+            IMtdAlg alg = new MtdRandomV2();
+            alg.run(deploymentList, 10);
         } catch (IOException e) {
             mtdView.printError(String.format("Could not find Deployment file."));
         } catch (ApplyException e) {

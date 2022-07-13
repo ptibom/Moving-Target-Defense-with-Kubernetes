@@ -72,10 +72,13 @@ public class TestSettings {
         assertEquals("Test.yaml", settings.getServiceFileName());
     }
 
+    /*
     @Test
     void testSetAndGetDeploymentFileName() {
         Settings settings = new Settings();
         settings.setDeploymentFileName("Test.yaml");
         assertEquals("Test.yaml", settings.getDeploymentFileName());
     }
+
+     */
 }

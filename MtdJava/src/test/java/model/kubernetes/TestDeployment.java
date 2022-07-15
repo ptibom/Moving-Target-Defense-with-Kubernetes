@@ -51,7 +51,7 @@ public class TestDeployment {
         node.addLabel(key, "active");
         node = new Node("minikube-m03");
         node.deleteLabel(key);
-        deployment.apply();
+        deployment.apply(1);
         assertNotNull(deployment);
     }
 
@@ -75,6 +75,34 @@ public class TestDeployment {
     }
 
     @Test
+    @Order(3)
+    void testScaleReplicas() throws NodeLabelException, NodeNotFoundException, IOException, ApplyException, InterruptedException, DeploymentNotFoundException {
+        String key = "mtd/node";
+        String value = "active";
+        String nodeName  = "minikube-m03";
+        INode node = new Node(nodeName);
+        node.addLabel(key, value);
+        IDeployment deployment = new Deployment(new File("DeploymentV3.yaml"));
+        System.out.println("Scaling to 1");
+        // Test 1
+        deployment.scaleReplicas(1);
+        Thread.sleep(10000);
+        assertEquals(1, deployment.getPods().size());
+
+        System.out.println("Scaling to 2");
+        // Test 2
+        deployment.scaleReplicas(2);
+        Thread.sleep(10000);
+        assertEquals(2, deployment.getPods().size());
+
+        System.out.println("Scaling to 1");
+        // Test 3
+        deployment.scaleReplicas(1);
+        Thread.sleep(10000);
+        assertEquals(1, deployment.getPods().size());
+    }
+
+    @Test
     @Order(2)
     void testPodList() throws DeploymentNotFoundException {
         Deployment deployment = new Deployment("nginx-deployment", "default");
@@ -89,16 +117,16 @@ public class TestDeployment {
         Deployment deployment2 = new Deployment(new File("DeploymentPrintNode2.yaml"));
 
         System.out.println("Applying 1");
-        deployment.apply();
+        deployment.apply(1);
         Thread.sleep(2000);
         System.out.println("Applying 2");
-        deployment2.apply();
+        deployment2.apply(1);
         Thread.sleep(2000);
         System.out.println("Applying 1");
-        deployment.apply();
+        deployment.apply(1);
         Thread.sleep(2000);
         System.out.println("Applying 2");
-        deployment2.apply();
+        deployment2.apply(1);
     }
 
     @Test

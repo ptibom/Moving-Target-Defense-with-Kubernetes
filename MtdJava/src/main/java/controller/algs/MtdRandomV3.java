@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class MtdRandomV2 implements IMtdAlg {
+public class MtdRandomV3 implements IMtdAlg {
 
     private int timeBetweenSwap = 5000;
     // Label key for the active k8 node
@@ -37,7 +37,7 @@ public class MtdRandomV2 implements IMtdAlg {
     private List<IDeployment> deployments;
 
 
-    public MtdRandomV2(List<IDeployment> deployments, int timeBetweenSwap) {
+    public MtdRandomV3(List<IDeployment> deployments, int timeBetweenSwap) {
         this.timeBetweenSwap = timeBetweenSwap;
         this.deployments = deployments;
     }
@@ -55,10 +55,26 @@ public class MtdRandomV2 implements IMtdAlg {
         // Delete old deployment if exists.
         System.out.println("Starting MTD alg.");
         try {
+            // todo Delete all deployments instead of the one
             IDeployment oldDeployment = new Deployment(deployments.get(0).getName(), "default");
             System.out.println("Deleting old deployment");
             oldDeployment.delete();
         } catch (DeploymentNotFoundException | DeploymentDeleteException ignored) {
+        }
+        try {
+            // Delete old labels if exists.
+            List<INode> nodeList = NodeTools.getWorkerNodes();
+            for (INode node : nodeList) {
+                if (node.getLabels().containsKey(LABEL_KEY)) {
+                    System.out.println("Deleting label from: " + node.getName());
+                    node.deleteLabel(LABEL_KEY);
+                }
+            }
+        }
+        catch (NodeNotFoundException | NodeLabelException ignored) {
+        }
+        catch (IllegalArgumentException e) {
+            throw new RuntimeException("Not enough worker nodes.");
         }
 
         // Make it loop infinitely if nSwaps = 0.
@@ -67,26 +83,15 @@ public class MtdRandomV2 implements IMtdAlg {
         if (nSwaps == 0) {
             i = -1;
         }
+
+        int deploymentCounter = 1;
+        String oldDeploymentName = "";
         while (i < nSwaps) {
-            try {
-                // Delete active labels if exists.
-                List<INode> nodeList = NodeTools.getWorkerNodes();
-                for (INode node : nodeList) {
-                    if (node.getLabels().containsKey(LABEL_KEY)) {
-                        System.out.println("Deleting label from: " + node.getName());
-                        node.deleteLabel(LABEL_KEY);
-                    }
-                }
-            }
-            catch (NodeNotFoundException | NodeLabelException ignored) {
-            }
-            catch (IllegalArgumentException e) {
-                throw new RuntimeException("Not enough worker nodes.");
-            }
             try {
                 // Get all available worker nodes.
                 List<INode> nodeList = NodeTools.getWorkerNodes();
                 // If currentNode has been selected before, then remove it from the list to prevent it from getting chosen again.
+
                 if (currentNode != null) {
                     System.out.println("Removing " + currentNode.getName() +  " from next random selection.");
                     nodeList.removeIf(tmpNode -> tmpNode.getName().equals(currentNode.getName()));
@@ -94,30 +99,30 @@ public class MtdRandomV2 implements IMtdAlg {
                 // Choose a random node out of the remaining available, then set it to active.
                 Random random = new Random();
                 int randIntNode = random.nextInt(nodeList.size());
+                // Remember old node so we can delete active label later.
+                INode oldNode = currentNode;
+                // Set new current node.
                 currentNode = nodeList.get(randIntNode);
+
                 System.out.println("Randomly selected node: " + currentNode.getName() + ", adding active label.");
                 currentNode.addLabel(LABEL_KEY, LABEL_VALUE);
                 // Choose a random deployment, can select same again
                 int randIntDeployment = random.nextInt(deployments.size());
 
                 // Swap active deployment
-                IDeployment oldDeployment = currentDeployment;
+
                 currentDeployment = deployments.get(randIntDeployment);
                 System.out.println("Randomly selected Deployment: " + currentDeployment.getFileName());
 
                 log.add(String.format("Node: %s, Deployment: %s", currentNode.getName(), currentDeployment.getFileName()));
 
-                // If same deployment, do a restart to swap node.
-                if (oldDeployment == currentDeployment) {
-                    System.out.println("Doing a rolloutRestart on deployment.");
-                    currentDeployment.rolloutRestart(); // Patches if same deployment.
-                }
-                // If not same, then apply the different deployment config.
-                else {
-                    System.out.println("Doing an Apply on deployment.");
-                    currentDeployment.apply(1); // Apply if a different deployment.
-                }
 
+                // Start a second pod on the new currentNode
+                currentDeployment.apply(deploymentCounter); // Deployment counter is necessary to make the deployments separate while deleting later.
+                System.out.println("Applying deployment with name: " + currentDeployment.getName());
+
+
+                // Wait for new pod to run and then wait a bit more for load balancer to catch up.
                 // Find if correct pod is running.
                 System.out.println("Trying to find the new pod...");
                 while (!(currentNode.getPods().size() == 1 && currentNode.getPods().get(0).getPhase().equalsIgnoreCase("running"))) {
@@ -126,12 +131,30 @@ public class MtdRandomV2 implements IMtdAlg {
                     // Refresh node
                     currentNode = new Node(currentNode.getName());
                 }
-                System.out.println("Pod found, waiting " + timeBetweenSwap + "ms before next iteration.");
+                // Pod is running. Label no longer needed, delete it.
+                System.out.println("Deleting active label on node: " + currentNode.getName());
+                currentNode.deleteLabel(LABEL_KEY);
+
+                // Waiting for load balancer to catch up.
+                Thread.sleep(1000);
+
+                if (!oldDeploymentName.isEmpty()) { // Empty on the first iteration.
+                    // Delete the old deployment
+                    System.out.println("Deleting deployment named: " + oldDeploymentName);
+                    IDeployment oldDeployment = new Deployment(oldDeploymentName, "default");
+                    oldDeployment.delete();
+                }
+
+                // Save deployment name so that we can separate it from the new one later.
+                oldDeploymentName = currentDeployment.getName();
+                deploymentCounter++;
+
+                System.out.println("Swap finished, waiting " + timeBetweenSwap + "ms before next iteration.");
                 Thread.sleep(timeBetweenSwap);
                 System.out.println("============= Iteration Done ============\n");
 
             } catch (NodeNotFoundException | NodeLabelException | ApplyException | InterruptedException |
-                     PodNotFoundException e) {
+                     PodNotFoundException | DeploymentDeleteException | DeploymentNotFoundException e) {
                 e.printStackTrace();
             }
             // Make it loop infinitely if nSwaps = 0.

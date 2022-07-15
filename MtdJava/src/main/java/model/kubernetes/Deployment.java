@@ -43,11 +43,13 @@ public class Deployment implements IDeployment {
     private V1Deployment v1Deployment;
     private final V1Deployment v1DeploymentUnmodified;
     private String filename;
+    private String baseName;
 
     public Deployment(File file) throws IOException {
         filename = file.getName();
         v1Deployment = (V1Deployment) Yaml.load(file);
         v1DeploymentUnmodified = (V1Deployment) Yaml.load(file);
+        baseName = v1DeploymentUnmodified.getMetadata().getName();
     }
 
     // TODO filename not set
@@ -80,7 +82,8 @@ public class Deployment implements IDeployment {
     }
 
     @Override
-    public void apply() throws ApplyException {
+    public void apply(int deploymentCounter) throws ApplyException {
+        v1DeploymentUnmodified.getMetadata().setName(baseName + deploymentCounter);
         try {
             v1Deployment = Kubectl.apply(V1Deployment.class)
                     .resource(v1DeploymentUnmodified)
@@ -91,7 +94,15 @@ public class Deployment implements IDeployment {
     }
 
     @Override
+    public void scaleReplicas(int nReplicas) throws ApplyException {
+        // todo delete me
+        v1DeploymentUnmodified.getSpec().setReplicas(nReplicas);
+        apply(1);
+    }
+
+    @Override
     public void rolloutRestart() throws ApplyException {
+        // todo following 3 lines needed?
         Map<String, String> restart = new HashMap<>();
         restart.put("date", Instant.now().getEpochSecond() + "");
         v1Deployment.getSpec().getTemplate().getMetadata().setAnnotations(restart);
@@ -130,4 +141,5 @@ public class Deployment implements IDeployment {
     public String getFileName() {
         return filename;
     }
+
 }

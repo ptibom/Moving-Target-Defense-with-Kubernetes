@@ -22,12 +22,14 @@ import model.kubernetes.exception.ApplyException;
 import model.kubernetes.exception.DeploymentDeleteException;
 import model.kubernetes.exception.DeploymentNotFoundException;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface IDeployment {
     String getFileName();
-    void apply() throws ApplyException;
+    void apply(int deploymentCounter) throws ApplyException;
     void rolloutRestart() throws ApplyException;
+    void scaleReplicas(int nReplicas) throws ApplyException;
     List<IPod> getPods() throws DeploymentNotFoundException;
     void delete() throws DeploymentDeleteException;
     String getName();

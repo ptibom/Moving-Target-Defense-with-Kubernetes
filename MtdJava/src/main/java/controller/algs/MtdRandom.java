@@ -93,7 +93,7 @@ public class MtdRandom implements IMtdAlg {
                     } catch (DeploymentNotFoundException | DeploymentDeleteException ignored) {
                     }
                     // Apply deployment, spins up pods etc.
-                    currentDeployment.apply();
+                    currentDeployment.apply(1);
 
                     // Wait a set time
                     Thread.sleep(timeBetweenSwap);
@@ -174,7 +174,7 @@ public class MtdRandom implements IMtdAlg {
                     currentDeployment.rolloutRestart(); // Patches if same deployment.
                 }
                 else {
-                    currentDeployment.apply(); // Apply if a different deployment.
+                    currentDeployment.apply(1); // Apply if a different deployment.
                 }
 
                 // Update pod statuses.

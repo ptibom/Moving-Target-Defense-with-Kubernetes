@@ -41,15 +41,15 @@ public class TestMtdRandomV2 {
     static void init() {
         try {
             Configuration.setDefaultApiClient(Config.defaultClient());
-        } catch (IOException e) {
+            IService service = new Service(new File("TestService.yaml"));
+            service.apply();
+        } catch (IOException | ApplyException e) {
             e.printStackTrace();
         }
     }
 
     @Test
     void testRun() throws Exception {
-        //IService service = new Service(new File("TestService.yaml"));
-        //service.apply();
         IDeployment deployment = new Deployment(new File("DeploymentPrintNode.yaml"));
         IDeployment deployment2 = new Deployment(new File("DeploymentPrintNode2.yaml"));
         List<IDeployment> deployments = new ArrayList<>();
@@ -67,7 +67,26 @@ public class TestMtdRandomV2 {
         }
     }
 
-    //@AfterAll
+    @Test
+    void testRunV3() throws Exception {
+        IDeployment deployment = new Deployment(new File("DeploymentV3.yaml"));
+        IDeployment deployment2 = new Deployment(new File("DeploymentV3-2.yaml"));
+        List<IDeployment> deployments = new ArrayList<>();
+        deployments.add(deployment);
+        deployments.add(deployment2);
+        IMtdAlg mtdRandom = new MtdRandomV3(deployments, 3000);
+        List<String> log = mtdRandom.run(100);
+
+        String previousEntry = "";
+        System.out.println("Printing all swaps from log: ");
+        for (String s : log) {
+            System.out.println(s);
+            assertNotEquals(previousEntry, s);
+            previousEntry = s;
+        }
+    }
+
+    @AfterAll
     static void deleteDeployment() throws DeploymentDeleteException, DeploymentNotFoundException,
             KubeServiceDeleteException, KubeServiceNotFoundException {
 

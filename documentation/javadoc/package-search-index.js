@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"controller"},{"l":"model"},{"l":"model.encapsulation"},{"l":"view"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"l":"controller"},{"l":"controller.algs"},{"l":"controller.yaml"},{"l":"model"},{"l":"model.exception"},{"l":"model.kubernetes"},{"l":"model.kubernetes.exception"},{"l":"view"}]

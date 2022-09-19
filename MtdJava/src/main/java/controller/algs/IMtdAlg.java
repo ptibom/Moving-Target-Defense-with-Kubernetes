@@ -23,7 +23,18 @@ import model.kubernetes.IDeployment;
 import java.util.List;
 
 public interface IMtdAlg {
+
+    /**
+     * Used for running the MTD algorithm forever
+     * @return Returns a list of logging events
+     */
     List<String> run();
+
+    /**
+     * Used for running the MTD algorithm for a number of swaps, then it cancels.
+     * @param nSwaps The number of times the algorithm should swap before it cancels.
+     * @return Returns a list of logging events
+     */
     List<String> run(int nSwaps);
     void setTimeBetweenSwap(int milliseconds);
     int getTimeBetweenSwap();

@@ -41,6 +41,10 @@ public class MtdController {
         this.settingsController = settingsController;
     }
 
+    /**
+     * Runs the MTD algorithm. Currently uses either V2 or V3, hardcoded.
+     * todo implement algorithm selection in the settings file
+     */
     public void runMtd() {
 
         try {
@@ -53,6 +57,8 @@ public class MtdController {
                 IDeployment deployment = new Deployment(new File(filename));
                 deploymentList.add(deployment);
             }
+            // This is where the algorithm is selected. Change the class to V3 or V2 before compiling.
+            // Or implement alg selection from settings.
             IMtdAlg alg = new MtdRandomV2(deploymentList, 5000);
             alg.run();
         } catch (IOException e) {
@@ -62,12 +68,5 @@ public class MtdController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        /* Select alg / controller.
-            if settings.alg == 1:
-                randomMtdController.run();
-            elif settings.alg == 2:
-                seqMtdController.run();
-         */
     }
 }

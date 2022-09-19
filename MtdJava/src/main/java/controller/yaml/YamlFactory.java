@@ -21,6 +21,11 @@ package controller.yaml;
 import model.Settings;
 
 public class YamlFactory<T> {
+    /**
+     * Creates YAML object
+     * @param clazz Class that the YAML tool should handle
+     * @return Returns generic IYAML
+     */
     public IYaml<T> createYaml(Class<T> clazz) {
         return new Yaml<>(clazz);
     }

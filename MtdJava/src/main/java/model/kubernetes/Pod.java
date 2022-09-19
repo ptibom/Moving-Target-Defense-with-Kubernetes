@@ -34,6 +34,12 @@ import java.util.Map;
 public class Pod implements IPod {
     private V1Pod v1Pod;
 
+    /**
+     * Gets pod object from the cluster by pod name and namspeace
+     * @param podName The pod name
+     * @param namespace The namespace
+     * @throws PodNotFoundException Throws if pod is not found
+     */
     public Pod(String podName, String namespace) throws PodNotFoundException {
         try {
             v1Pod = Kubectl.get(V1Pod.class)
@@ -45,18 +51,37 @@ public class Pod implements IPod {
         }
     }
 
+    /**
+     * Gets pod object from the cluster by pod name and the default namespace
+     * @param podName the pod name
+     * @throws PodNotFoundException Throws if pod is not found
+     */
     public Pod(String podName) throws PodNotFoundException {
         this(podName, "default");
     }
 
+    /**
+     * Creates a Pod object from a Kubernetes client V1Pod
+     * @param pod
+     */
     public Pod(V1Pod pod) {
         v1Pod = pod;
     }
 
+    /**
+     * Creates a Pod object from a YAML file
+     * @param yamlFile The YAML File
+     * @throws IOException Throws if file not found
+     */
     public Pod(File yamlFile) throws IOException {
         v1Pod = (V1Pod) Yaml.load(yamlFile);
     }
 
+    /**
+     * Apply the pod to the cluster
+     * @param namespace The namespace where the pod should run
+     * @throws ApplyException Throws if apply failed in the cluster
+     */
     @Override
     public void apply(String namespace) throws ApplyException {
         try {
@@ -69,11 +94,19 @@ public class Pod implements IPod {
         }
     }
 
+    /**
+     * Gets the name of the pod
+     * @return The pod name
+     */
     @Override
     public String getName() {
         return v1Pod.getMetadata().getName();
     }
 
+    /**
+     * Gets the name of the Node the pod is running on
+     * @return The name of the node
+     */
     @Override
     public String getNodeName() {
         return v1Pod.getSpec().getNodeName();
@@ -88,6 +121,12 @@ public class Pod implements IPod {
         return v1Pod.getMetadata().getLabels();
     }
 
+    /**
+     * Adds a label to the pod
+     * @param key The label key
+     * @param value The label value
+     * @throws PodLabelException Throws if label could not be added
+     */
     @Override
     public void addLabel(String key, String value) throws PodLabelException {
         try {
@@ -101,16 +140,30 @@ public class Pod implements IPod {
         }
     }
 
+    /**
+     * Delete label from the pod
+     * @param key Key of the label to delete
+     * @throws PodLabelException
+     */
     @Override
     public void deleteLabel(String key) throws PodLabelException {
         addLabel(key, null);
     }
 
+    /**
+     * Gets the last known phase of the pod
+     * See Pod Lifecycle on kubernetes docs
+     * @return The phase. running, pending, etc
+     */
     @Override
     public String getPhase() {
         return v1Pod.getStatus().getPhase();
     }
 
+    /**
+     * Deletes the pod from the cluster
+     * @throws PodDeleteException Throws if pod could not be deleted
+     */
     @Override
     public void delete() throws PodDeleteException {
         try {

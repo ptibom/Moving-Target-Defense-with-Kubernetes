@@ -45,6 +45,11 @@ public class Deployment implements IDeployment {
     private String filename;
     private String baseName;
 
+    /**
+     * Creates a Deployment object from a config file
+     * @param file A kubernetes deployment.yaml file
+     * @throws IOException Throws IOException if file does not exist
+     */
     public Deployment(File file) throws IOException {
         filename = file.getName();
         v1Deployment = (V1Deployment) Yaml.load(file);
@@ -52,7 +57,12 @@ public class Deployment implements IDeployment {
         baseName = v1DeploymentUnmodified.getMetadata().getName();
     }
 
-    // TODO filename not set
+    /**
+     * Gets a Deployment from a running cluster based on the Deployment name.
+     * @param name Deployment name that is to be found in the cluster.
+     * @param namespace Cluster namespace to look for the deployment
+     * @throws DeploymentNotFoundException Throws exception if deployment is not found.
+     */
     public Deployment(String name, String namespace) throws DeploymentNotFoundException {
         try {
             v1Deployment = Kubectl.get(V1Deployment.class)
@@ -65,6 +75,11 @@ public class Deployment implements IDeployment {
         }
     }
 
+    /**
+     * Gets all pods belonging to this deployment
+     * @return List of pods
+     * @throws DeploymentNotFoundException Throws exception if Deployment is not found
+     */
     public List<IPod> getPods() throws DeploymentNotFoundException {
         CoreV1Api api = new CoreV1Api();
         String label = "app=" + v1Deployment.getMetadata().getLabels().get("app");
@@ -81,6 +96,11 @@ public class Deployment implements IDeployment {
         }
     }
 
+    /**
+     * Apply the Deployment with an integer at the end of the deployment name.
+     * @param deploymentCounter Integer that is appended to the deployment name.
+     * @throws ApplyException Throws if there was a problem with applying.
+     */
     @Override
     public void apply(int deploymentCounter) throws ApplyException {
         v1DeploymentUnmodified.getMetadata().setName(baseName + deploymentCounter);
@@ -93,16 +113,25 @@ public class Deployment implements IDeployment {
         }
     }
 
+    /**
+     * Scales replicas
+     * @param nReplicas The new number of replicas
+     * @throws ApplyException Throws exception if the change could not be applied.
+     */
     @Override
     public void scaleReplicas(int nReplicas) throws ApplyException {
-        // todo delete me
         v1DeploymentUnmodified.getSpec().setReplicas(nReplicas);
         apply(1);
     }
 
+    /**
+     * Forces a rollout restart of the deployment by patching the running config file in memory with a timestamp.
+     * Restart only occurs if the patch is unique, hence why the timestamp is added.
+     * @throws ApplyException Throws exception if the change could not be applied.
+     */
     @Override
     public void rolloutRestart() throws ApplyException {
-        // todo following 3 lines needed?
+        // todo The following 3 lines may no longer be necessary.
         Map<String, String> restart = new HashMap<>();
         restart.put("date", Instant.now().getEpochSecond() + "");
         v1Deployment.getSpec().getTemplate().getMetadata().setAnnotations(restart);
@@ -119,6 +148,10 @@ public class Deployment implements IDeployment {
         }
     }
 
+    /**
+     * Deletes this deployment from the cluster
+     * @throws DeploymentDeleteException Throws exception if deployment could not be deleted or does not exist.
+     */
     @Override
     public void delete() throws DeploymentDeleteException {
         try {

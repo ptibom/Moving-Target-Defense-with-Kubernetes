@@ -25,9 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The best working version of our MTD algorithms. Has better handling of the integrated load-balancer than V1 and V2.
+ */
 public class MtdRandomV3 implements IMtdAlg {
 
-    private int timeBetweenSwap = 5000;
+    private int timeBetweenSwap = 5000; // todo Make timeBetweenSwap randomized.
     // Label key for the active k8 node
     private static final String LABEL_KEY = "mtd/node";
     // Label value for the active K8 node.
@@ -37,17 +40,30 @@ public class MtdRandomV3 implements IMtdAlg {
     private List<IDeployment> deployments;
 
 
+    /**
+     *
+     * @param deployments A list of deployments that will be randomized during the MTD execution.
+     * @param timeBetweenSwap The time the MTD should wait before swapping to a different node.
+     */
     public MtdRandomV3(List<IDeployment> deployments, int timeBetweenSwap) {
         this.timeBetweenSwap = timeBetweenSwap;
         this.deployments = deployments;
     }
 
+    /**
+     * Used for running the MTD algorithm forever
+     * @return Returns a list of logging events
+     */
     @Override
     public List<String> run() {
         return run(0);
     }
 
-    // todo fix return value
+    /**
+     * Used for running the MTD algorithm for a number of swaps, then it cancels.
+     * @param nSwaps The number of times the algorithm should swap before it cancels.
+     * @return Returns a list of logging events
+     */
     @Override
     public List<String> run(int nSwaps) {
         List<String> log = new ArrayList<>(); // Logs the swaps.

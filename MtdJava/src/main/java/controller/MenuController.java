@@ -28,8 +28,6 @@ import java.util.Scanner;
 public class MenuController {
     MenuView menuView = new MenuView();
 
-    // TODO test showMenu when it is finished
-
     public void showMenu() {
         menuView.showMenu();
         Scanner sc = new Scanner(System.in);

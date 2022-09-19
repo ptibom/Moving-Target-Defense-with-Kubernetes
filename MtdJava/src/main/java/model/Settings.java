@@ -26,7 +26,9 @@ public class Settings {
     private boolean serviceEnabled = false; // LoadBalancer
     private String serviceFileName = "TestService.yaml";
     private List<String> deploymentFileNames = new ArrayList<>();
+    // Todo The system currently always logs to system out despite this setting.
     private boolean logToConsole = true;
+    // Todo The setting exist but logging to file is not yet implemented.
     private boolean logToFile = true;
 
     public String getName() {

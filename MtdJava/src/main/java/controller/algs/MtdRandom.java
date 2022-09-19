@@ -25,6 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Deprecated
+ * This is the first MTD algorthm. It is functional but confusing.
+ * Recommended to use V2 or V3 instead.
+ */
 public class MtdRandom implements IMtdAlg {
 
     private IDeployment currentDeployment;

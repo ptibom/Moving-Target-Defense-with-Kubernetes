@@ -28,6 +28,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class NodeTools {
+    /**
+     * Get all worker nodes on the cluster
+     * @return List of nodes
+     * @throws NodeNotFoundException Throws if nodes not found
+     */
     public static List<INode> getWorkerNodes() throws NodeNotFoundException {
         ListOptions listOptions = new ListOptions();
         listOptions.setLabelSelector("!node-role.kubernetes.io/master");

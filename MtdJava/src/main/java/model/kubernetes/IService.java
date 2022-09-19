@@ -22,6 +22,15 @@ import model.kubernetes.exception.ApplyException;
 import model.kubernetes.exception.KubeServiceDeleteException;
 
 public interface IService {
+    /**
+     * Applies the service to the cluster
+     * @throws ApplyException Throws if it could not be applied
+     */
     void apply() throws ApplyException;
+
+    /**
+     * Deletes the service from the cluster
+     * @throws KubeServiceDeleteException Throws if it could not be deleted
+     */
     void delete() throws KubeServiceDeleteException;
 }

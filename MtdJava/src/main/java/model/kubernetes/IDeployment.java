@@ -27,10 +27,35 @@ import java.util.List;
 
 public interface IDeployment {
     String getFileName();
-    void apply(int deploymentCounter) throws ApplyException;
-    void rolloutRestart() throws ApplyException;
-    void scaleReplicas(int nReplicas) throws ApplyException;
     List<IPod> getPods() throws DeploymentNotFoundException;
-    void delete() throws DeploymentDeleteException;
     String getName();
+
+    /**
+     * Apply the Deployment with an integer at the end of the deployment name.
+     * @param deploymentCounter Integer that is appended to the deployment name.
+     * @throws ApplyException Throws if there was a problem with applying.
+     */
+    void apply(int deploymentCounter) throws ApplyException;
+
+    /**
+     * Forces a rollout restart of the deployment by patching the running config file in memory with a timestamp.
+     * Restart only occurs if the patch is unique, hence why the timestamp is added.
+     * @throws ApplyException Throws exception if the change could not be applied.
+     */
+    void rolloutRestart() throws ApplyException;
+
+    /**
+     * Scales replicas
+     * @param nReplicas The new number of replicas
+     * @throws ApplyException Throws exception if the change could not be applied.
+     */
+    void scaleReplicas(int nReplicas) throws ApplyException;
+
+
+    /**
+     * Deletes this deployment from the cluster
+     * @throws DeploymentDeleteException Throws exception if deployment could not be deleted or does not exist.
+     */
+    void delete() throws DeploymentDeleteException;
+
 }

@@ -22,6 +22,19 @@ import java.io.File;
 import java.io.IOException;
 
 public interface IYaml<T> {
+    /**
+     * Load a generic YAMl file to POJO
+     * @param file YAML file to load
+     * @return Returns POJO
+     * @throws IOException Throws exception if file could not be read
+     */
     T load(File file) throws IOException;
+
+    /**
+     * Saves generic class to YAML file on the disk
+     * @param file The file to be stored
+     * @param t Generic class
+     * @throws IOException
+     */
     void save(File file, T t) throws IOException;
 }

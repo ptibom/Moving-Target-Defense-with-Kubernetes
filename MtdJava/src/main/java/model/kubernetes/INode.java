@@ -25,9 +25,38 @@ import java.util.List;
 import java.util.Map;
 
 public interface INode {
+
+    /**
+     * Gets this node name
+     * @return The node name
+     */
     String getName();
+
+    /**
+     * Gets all the labels on this node
+     * @return Map of labels
+     */
     Map<String, String> getLabels();
+
+    /**
+     * Adds a label to this node
+     * @param key Label key
+     * @param value Label value
+     * @throws NodeLabelException Throws if label could not be added
+     */
     void addLabel(String key, String value) throws NodeLabelException;
+
+    /**
+     * Get all pods on this node
+     * @return List of pods on this node
+     * @throws PodNotFoundException Throws if no pods found on this node
+     */
     List<IPod> getPods() throws PodNotFoundException;
+
+    /**
+     * Deletes a label from this node
+     * @param key Key of the label to delete
+     * @throws NodeLabelException Throws if label could not be deleted
+     */
     void deleteLabel(String key) throws NodeLabelException;
 }

@@ -70,7 +70,7 @@ public class TestMtdRandomV2 {
     @Test
     void testRunV3() throws Exception {
         IDeployment deployment = new Deployment(new File("DeploymentV3.yaml"));
-        IDeployment deployment2 = new Deployment(new File("DeploymentV3-2.yaml"));
+        IDeployment deployment2 = new Deployment(new File("DeploymentV3i2.yaml"));
         List<IDeployment> deployments = new ArrayList<>();
         deployments.add(deployment);
         deployments.add(deployment2);

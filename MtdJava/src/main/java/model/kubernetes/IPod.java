@@ -25,12 +25,56 @@ import model.kubernetes.exception.PodLabelException;
 import java.util.Map;
 
 public interface IPod {
+    /**
+     * Gets the name of the pod
+     * @return The pod name
+     */
     String getName();
+
+    /**
+     * Gets the name of the Node the pod is running on
+     * @return The name of the node
+     */
     String getNodeName();
+
+    /**
+     * Gets a list of labels attached to the pod.
+     * @return Returns a list of strings.
+     */
     Map<String, String> getLabels();
+
+    /**
+     * Adds a label to the pod
+     * @param key The label key
+     * @param value The label value
+     * @throws PodLabelException Throws if label could not be added
+     */
     void addLabel(String key, String value) throws PodLabelException;
+
+    /**
+     * Apply the pod to the cluster
+     * @param namespace The namespace where the pod should run
+     * @throws ApplyException Throws if apply failed in the cluster
+     */
     void apply(String namespace) throws ApplyException;
+
+    /**
+     * Delete label from the pod
+     * @param key Key of the label to delete
+     * @throws PodLabelException
+     */
     void deleteLabel(String key) throws PodLabelException;
+
+    /**
+     * Gets the last known phase of the pod
+     * See Pod Lifecycle on kubernetes docs
+     * @return The phase. running, pending, etc
+     */
     String getPhase();
+
+    /**
+     * Deletes the pod from the cluster
+     * @throws PodDeleteException Throws if pod could not be deleted
+     */
     void delete() throws PodDeleteException;
 }

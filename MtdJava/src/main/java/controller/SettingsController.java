@@ -30,11 +30,21 @@ import java.util.List;
 public class SettingsController {
     private Settings settings = new Settings();
 
+    /**
+     * Loads a settings YAML file
+     * @param file The settings YAML File
+     * @throws IOException Throws if settings file could not be loaded
+     */
     public void loadSettings(File file) throws IOException {
         IYaml<Settings> yaml = new YamlFactory<Settings>().createYaml(Settings.class);
         settings = yaml.load(file);
     }
 
+    /**
+     * Sets settings name and verifies that it is a valid file name, ie no special characters.
+     * @param name The filename for the settings file including .yaml/.yml ending
+     * @throws InvalidFileNameException Throws if illegal filename
+     */
     public void setName(String name) throws InvalidFileNameException {
         String filename = name.strip();
         if (filename.matches("^[A-z\\d]+(\\.yaml|\\.yml)$")) {
@@ -45,11 +55,17 @@ public class SettingsController {
         }
     }
 
+    /**
+     * Saves the Settings object to file in YAML format
+     * @throws IOException Throws if file could not be saved
+     */
     public void saveSettings() throws IOException {
         IYaml<Settings> yaml = new YamlFactory<Settings>().createYaml(Settings.class);
         String filename = settings.getName();
         yaml.save(new File(filename), settings);
     }
+
+    /* Getters and Setters of the Settings object */
 
     public Settings getSettings() {
         return settings;

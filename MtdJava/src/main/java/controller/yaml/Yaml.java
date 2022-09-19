@@ -35,6 +35,12 @@ public class Yaml<T> implements IYaml<T> {
         this.clazz = clazz;
     }
 
+    /**
+     * Load a generic YAMl file to POJO
+     * @param file YAML file to load
+     * @return Returns POJO
+     * @throws IOException Throws exception if file could not be read
+     */
     @Override
     public T load(File file) throws IOException {
         YAMLMapper mapper = new YAMLMapper(new YAMLFactory());
@@ -42,6 +48,12 @@ public class Yaml<T> implements IYaml<T> {
         return t;
     }
 
+    /**
+     * Saves generic class to YAML file on the disk
+     * @param file The file to be stored
+     * @param t Generic class
+     * @throws IOException
+     */
     @Override
     public void save(File file, T t) throws IOException {
         YAMLFactory f = YAMLFactory.builder()

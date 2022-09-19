@@ -24,7 +24,9 @@ import model.kubernetes.exception.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
+/**
+ * This is a rewritten version of V1 to make it more comprehensible.
+ */
 public class MtdRandomV2 implements IMtdAlg {
 
     private int timeBetweenSwap = 5000;
@@ -37,17 +39,31 @@ public class MtdRandomV2 implements IMtdAlg {
     private List<IDeployment> deployments;
 
 
+
+    /**
+     *
+     * @param deployments A list of deployments that will be randomized during the MTD execution.
+     * @param timeBetweenSwap The time the MTD should wait before swapping to a different node.
+     */
     public MtdRandomV2(List<IDeployment> deployments, int timeBetweenSwap) {
         this.timeBetweenSwap = timeBetweenSwap;
         this.deployments = deployments;
     }
 
+    /**
+     * Used for running the MTD algorithm forever
+     * @return Returns a list of logging events
+     */
     @Override
     public List<String> run() {
         return run(0);
     }
 
-    // todo fix return value
+    /**
+     * Used for running the MTD algorithm for a number of swaps, then it cancels.
+     * @param nSwaps The number of times the algorithm should swap before it cancels.
+     * @return Returns a list of logging events
+     */
     @Override
     public List<String> run(int nSwaps) {
         List<String> log = new ArrayList<>(); // Logs the swaps.

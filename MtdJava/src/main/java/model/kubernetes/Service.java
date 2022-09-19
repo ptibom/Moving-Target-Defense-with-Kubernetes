@@ -32,6 +32,12 @@ import java.io.IOException;
 public class Service implements IService {
     private V1Service v1Service;
 
+    /**
+     * Gets a Service from the cluster by service name and namespace
+     * @param name The service name
+     * @param namespace The namespace
+     * @throws KubeServiceNotFoundException Throws if service could not be found
+     */
     public Service(String name, String namespace) throws KubeServiceNotFoundException {
         try {
             v1Service = Kubectl.get(V1Service.class)
@@ -43,10 +49,19 @@ public class Service implements IService {
         }
     }
 
+    /**
+     * Creates a service object from a kubernetes Service YAML file
+     * @param file A Service.yaml file
+     * @throws IOException Throws if file could not be found
+     */
     public Service(File file) throws IOException {
         v1Service = (V1Service) Yaml.load(file);
     }
 
+    /**
+     * Applies the service to the cluster
+     * @throws ApplyException Throws if it could not be applied
+     */
     @Override
     public void apply() throws ApplyException {
         try {
@@ -59,6 +74,10 @@ public class Service implements IService {
     }
 
 
+    /**
+     * Deletes the service from the cluster
+     * @throws KubeServiceDeleteException Throws if it could not be deleted
+     */
     @Override
     public void delete() throws KubeServiceDeleteException {
         try {

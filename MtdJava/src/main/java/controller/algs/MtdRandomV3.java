@@ -55,7 +55,7 @@ public class MtdRandomV3 implements IMtdAlg {
         // Delete old deployment if exists.
         System.out.println("Starting MTD alg.");
         try {
-            // todo Delete all deployments instead of the one
+            // todo Delete all deployments instead of the one. Makes it easier to restart the MTD.
             IDeployment oldDeployment = new Deployment(deployments.get(0).getName(), "default");
             System.out.println("Deleting old deployment");
             oldDeployment.delete();

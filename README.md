@@ -3,6 +3,10 @@ This tool is a working prototype that was part of a Master's thesis project at C
 
 The tool swaps applications / pods between different Kubernetes nodes in order to achieve a moving target defense. See the master's thesis for more information.
 
+## Thesis
+The thesis is currently hosted in this repository while awaiting publication by Chalmers Library.  
+[View Thesis](https://raw.githubusercontent.com/ptibom/Moving-Target-Defense-with-Kubernetes/3c6e1ffc3401f7bcb01a55437691357a2895634f/documentation/MTD%20Master%20Thesis%20220918.pdf)
+
 ## How to build
 The project is created using Maven.  
 Run `mvn package` to create a standalone snapshot.
